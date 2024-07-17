@@ -1,26 +1,38 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect} from "react";
+import { Navbar } from "../component/navbar";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
-import "../../styles/home.css";
 
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+
+	const navigate = useNavigate()
+
+	const{actions, store} = useContext(Context)
+
+	useEffect(() => {
+		const isLoggedIn = sessionStorage.getItem("accessToken")
+
+		if (!isLoggedIn){
+			navigate("/")
+		} else {
+			actions.userPrivate()
+			.then(() => console.log("Datos protegidos cargados correctamente."))
+			.catch(error => console.error("Error al cargar datos protegidos.", error))
+		}
+	}, [actions, navigate]);
+
+	const {user} = store;
 
 	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
-			</div>
-			<p>
-				This boilerplate comes with lots of documentation:{" "}
-				<a href="https://start.4geeksacademy.com/starters/react-flask">
-					Read documentation
-				</a>
-			</p>
+		<>
+		<Navbar />
+		<div className="container-fluid">
+            <h1>
+				{user && (
+					<p>Bienvenido, {user.username}, gracias por iniciar sesión!</p>
+				)}
+			</h1>
 		</div>
+		</>
 	);
 };
