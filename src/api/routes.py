@@ -20,11 +20,11 @@ def handle_register():
     user_password = request_body.get("password", None)
 
     if not user_email or not user_password:
-        return jsonify({"Error": "Email and password are required"}), 401
+        return jsonify({"Error": "Email y contraseña son campos requeridos."}), 401
 
     existing_user = User.query.filter_by(email=user_email).first()
     if existing_user:
-        return jsonify({"Error": "User already exists."}), 400
+        return jsonify({"Error": "El usuario ya existe."}), 400
 
     new_user = User(
         email=user_email,
@@ -44,12 +44,12 @@ def handle_login():
     user_password = request_body.get("password", None)
 
     if not user_email or not user_password:
-        return jsonify({"error": "Email and password are required"}), 401
+        return jsonify({"error": "Email y contraseña son campos requeridos."}), 401
 
     user = User.query.filter_by(email=user_email, password=user_password).first()
 
     if user is None:
-        return jsonify({"Error": "Invalid email or password."}), 401
+        return jsonify({"Error": "Correo o contraseña incorrectos."}), 401
 
     access_token = create_access_token(identity=user.id)
     return jsonify({"token": access_token, "user_id": user.id}), 200
