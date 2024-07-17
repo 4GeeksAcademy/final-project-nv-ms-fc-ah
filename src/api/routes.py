@@ -18,6 +18,7 @@ def handle_register():
     request_body = request.get_json()
     user_email = request_body.get("email", None)
     user_password = request_body.get("password", None)
+    user_name = request_body.get("username", None)
 
     if not user_email or not user_password:
         return jsonify({"Error": "Email y contraseña son campos requeridos."}), 401
@@ -28,7 +29,8 @@ def handle_register():
 
     new_user = User(
         email=user_email,
-        password=user_password
+        password=user_password,
+        username = user_name
     )
 
     db.session.add(new_user)
