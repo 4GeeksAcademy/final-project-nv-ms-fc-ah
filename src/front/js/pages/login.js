@@ -14,6 +14,7 @@ export const Login = () => {
         e.preventDefault();
         try{
             const response = await actions.userLogin(email, password);
+            
             if (response && response.token){
                 window.location.href = "/home";
             }

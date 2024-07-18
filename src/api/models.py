@@ -22,6 +22,8 @@ class User(db.Model):
             "img": self.img
         }
 
+   
+
 class GroupMember(db.Model):
     __tablename__= "Group Member"
     id = db.Column(db.Integer, primary_key=True)
@@ -79,3 +81,4 @@ class Favorite_paths(db.Model):
             "user_id": self.user_id,
             "path_id": self.path_id
         }
+     

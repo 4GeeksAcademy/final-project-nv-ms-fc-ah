@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		 store: {
 			user: null,
-			message: null,
+			/* message: null,
 			demo: [
 				{
 					title: "FIRST",
@@ -14,7 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			] */
 		}, 
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -112,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			userPrivate: async () =>{
+			userHome: async () =>{
 				try {
 					const token = sessionStorage.getItem("accessToken")
 					if (!token) {
@@ -132,6 +132,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const {user} = getStore();
+				
 
 					if(JSON.stringify(user) !== JSON.stringify(data)){
 						setStore({user: data});
