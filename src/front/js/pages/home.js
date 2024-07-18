@@ -107,6 +107,8 @@ export const Home = () => {
         </h1>
         <br />
       </div>
+      
+      <Carousel />
 
       {/*    <div className="container-fluid mt-5">
         <div className="container">

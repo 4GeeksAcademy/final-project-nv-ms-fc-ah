@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/home.css";
+import "../../styles/landing.css";
 import { GiMountains } from "react-icons/gi";
+import { Footer } from "../component/footer";
 
 export const Landing = () => {
   const navigate = useNavigate();
@@ -36,6 +37,12 @@ export const Landing = () => {
           </div>
         </div>
       </div>
+
+      <div className="landing-page">
+        <div className="background-container">
+        </div>
+      </div>
+      <Footer />
     </>
   );
 };
