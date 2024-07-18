@@ -1,6 +1,6 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
-		/* store: {
+		 store: {
 			user: null,
 			message: null,
 			demo: [
@@ -15,7 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			]
-		}, */
+		}, 
 		actions: {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
