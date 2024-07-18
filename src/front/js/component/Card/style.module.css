@@ -1,0 +1,35 @@
+.container_card {
+  width: 390px;
+  height: auto;
+  margin-top: 2rem;
+  padding: 1px;
+  transition: 0.6s;
+}
+
+.card_img,
+img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 5%;
+}
+
+.card_text_title {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+  font-size: 1rem;
+}
+
+.card_text_footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+  font-size: 1rem;
+}
+
+.container_card:hover {
+  cursor: pointer;
+  border-radius: 5%;
+  box-shadow: 4px 6px 5px 0px rgba(147, 147, 147, 0.56);
+}
