@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import PropTypes from "prop-types";
 
 class ScrollToTop extends React.Component {
@@ -18,3 +18,4 @@ ScrollToTop.propTypes = {
 	location: PropTypes.object,
 	children: PropTypes.any
 };
+ */
