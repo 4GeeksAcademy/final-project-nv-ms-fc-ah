@@ -45,6 +45,7 @@ def handle_login():
     user_email = request_body.get("email", None)
     user_password = request_body.get("password", None)
 
+
     if not user_email or not user_password:
         return jsonify({"error": "Email y contraseña son campos requeridos."}), 401
 
