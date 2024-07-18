@@ -15,7 +15,7 @@ export const Home = () => {
 		if (!isLoggedIn){
 			navigate("/")
 		} else {
-			actions.userPrivate()
+			actions.userHome()
 			.then(() => console.log("Datos protegidos cargados correctamente."))
 			.catch(error => console.error("Error al cargar datos protegidos.", error))
 		}
@@ -23,13 +23,15 @@ export const Home = () => {
 
 	const {user} = store;
 
+	console.log(store)
+
 	return (
 		<>
 		<Navbar />
 		<div className="container-fluid">
             <h1>
 				{user && (
-					<p>Bienvenido, {user.username}, gracias por iniciar sesión!</p>
+					<p>Bienvenido, {user.id}, gracias por iniciar sesión!</p>
 				)}
 			</h1>
 		</div>
