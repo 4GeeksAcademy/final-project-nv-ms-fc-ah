@@ -5,7 +5,7 @@ import { Context } from "../store/appContext";
 import Card from "../component/Card/card";
 
 export const Home = () => {
-  const rutas = [
+  /* const rutas = [
     {
       img: "https://images.unsplash.com/photo-1535479672101-8486af672be0?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       nombre: "Cerro San Cristóbal",
@@ -49,7 +49,7 @@ export const Home = () => {
       dificultad: "Dificil",
     },
   ];
-
+ */
   const [userData, setUserData] = useState();
 
   const navigate = useNavigate();
@@ -105,9 +105,10 @@ export const Home = () => {
         <h1>
           {userData && <p>Bienvenido {userData.username.toUpperCase()}</p>}
         </h1>
+        <br />
       </div>
 
-      <div className="container-fluid mt-5">
+      {/*    <div className="container-fluid mt-5">
         <div className="container">
           <h2>
             Rutas locales favoritas
@@ -130,7 +131,7 @@ export const Home = () => {
             </div>
           </h2>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
