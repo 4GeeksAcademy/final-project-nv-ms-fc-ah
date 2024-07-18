@@ -1,21 +1,39 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/home.css";
+import { GiMountains } from "react-icons/gi";
+
 export const Landing = () => {
-    const navigate = useNavigate();
-    return (
-        <div className="container-fluid py-5 text-center">
-            <div className="row">
-                <div className="col-12">
-                    <h1>SenderosApp</h1>
-                </div>
-            </div>
-            <div className="row mt-5">
-                <div className="col-12 text-center">
-                    <button type="button" onClick={() => navigate("/login")} className="btn btn-primary btn-lg me-5">Iniciar Sesión</button>
-                    <button type="button" onClick={() => navigate("/register")} className="btn btn-success btn-lg">Registrarse</button>
-                </div>
-            </div>
+  const navigate = useNavigate();
+  return (
+    <div className="container-fluid  py-3 text-center">
+      <div className="d-flex justify-content-between">
+        <div className="col-4 mt-1">
+          <h3 className="text-start  fw-bolder">
+            <span className="me-2 h1">
+              <GiMountains />
+            </span>
+            SenderosApp
+          </h3>
         </div>
-    );
+
+        <div className="col-4 text-end mt-3">
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="btn btn-primary fw-bolder border-dark btn-sm me-2 rounded-pill"
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            className="btn btn-success fw-bolder border-dark btn-sm rounded-pill"
+          >
+            Registrarse
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
