@@ -64,7 +64,6 @@ def get_user(user_id):
     
     user = User.query.get(user_id) 
 
-    print('usuario:')
 
     if not user:
        return jsonify({"Mensaje": "Usuario no encontrado."}), 404

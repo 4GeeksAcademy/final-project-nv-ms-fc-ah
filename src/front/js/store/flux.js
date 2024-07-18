@@ -60,14 +60,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 						body: JSON.stringify({ email, password })
 					});
-					
-
-					
+				
 					const data = await resp.json();
 					
 					if (!resp.ok) {
 						throw new Error(data.msg || "Error al iniciar sesión.");
 					}
+					
 					
 					sessionStorage.setItem("accessToken", data.token);
 					// don't forget to return something, that is how the async resolves
@@ -77,9 +76,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 
-				/**agregar segunda peticion por ruta id, para poder inyectarlo en el store */
-
 			},
+
 
 			userRegister: async(email, password, username) => {
 				try{
