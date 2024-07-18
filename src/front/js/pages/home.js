@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navbar } from "../component/navbar";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import Card from "../component/card";
+import Card from "../component/Card/card";
 import { Carousel } from "../component/carousel";
 
 export const Home = () => {
