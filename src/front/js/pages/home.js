@@ -3,6 +3,7 @@ import { Navbar } from "../component/navbar";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import Card from "../component/card";
+import { Carousel } from "../component/carousel";
 
 export const Home = () => {
   const rutas = [
@@ -90,6 +91,8 @@ export const Home = () => {
           )}
         </h1>
       </div>
+      
+      <Carousel />
 
       <div className="container-fluid mt-5">
         <div className="container">
