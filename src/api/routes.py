@@ -57,19 +57,21 @@ def handle_login():
     access_token = create_access_token(identity=user.id)
     return jsonify({"token": access_token, "user_id": user.id}), 200
 
-# 
-@api.route('/api/user/<int:user_id>', methods=['GET'])
+
+#   
+@api.route('/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     
     user = User.query.get(user_id) 
+
+    print('usuario:')
 
     if not user:
        return jsonify({"Mensaje": "Usuario no encontrado."}), 404
  
 
-    return jsonify(user), 200
+    return jsonify(user.serialize()), 200
 
-    
 
 
 

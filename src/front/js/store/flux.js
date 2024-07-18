@@ -61,8 +61,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify({ email, password })
 					});
 					
-					const data = await resp.json();
 
+					
+					const data = await resp.json();
+					
 					if (!resp.ok) {
 						throw new Error(data.msg || "Error al iniciar sesión.");
 					}
@@ -74,6 +76,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error al iniciar sesión.", error)
 					throw error;
 				}
+
+				/**agregar segunda peticion por ruta id, para poder inyectarlo en el store */
+
 			},
 
 			userRegister: async(email, password, username) => {
