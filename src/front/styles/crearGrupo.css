@@ -1,0 +1,21 @@
+.crear-grupo-page {
+    background-image: url('https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY');
+    background-size: cover; /* Ensure the background covers the whole page */
+    background-repeat: no-repeat; /* Prevent the background from repeating */
+    background-position: center; /* Center the background image */
+    min-height: 100vh; /* Ensure the background covers the entire viewport height */
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form {
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+}
