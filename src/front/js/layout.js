@@ -8,6 +8,7 @@ import { Register } from "./pages/register";
 import { Home } from "./pages/home";
 import { Grupos } from "./pages/grupos";
 import { CrearGrupo } from "./pages/crearGrupo";
+import { Protegido } from "./component/protegido";
 import injectContext from "./store/appContext";
 
 import Senderos from "./component/senderos";
@@ -26,20 +27,22 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <Routes>
+          
           <Route element={<Landing />} path="/" />
           <Route element={<Login />} path="/login" />
           <Route element={<Register />} path="/register" />
-          <Route element={<Home />} path="/home" />
-          <Route element={<h1>Not found!</h1>} />
-          <Route element={<Senderos />} path="/senderos" />
+          <Route element={<Protegido />}>
+            <Route element={<Home />} path="/home"/>
+            <Route element={<h1>Not found!</h1>} />
+            <Route element={<Senderos />} path="/senderos" />
 
-          <Route element={<Grupos />} path="/grupos" />
-          <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
-          <Route
-            element={<InfoRutas />}
-            path="/infoRuta/:nombre/:direccion/:longitud/:dificultad/:lat/:lng"
-          />
-
+            <Route element={<Grupos />} path="/grupos" />
+            <Route element={<CrearGrupo />} path="/home/grupos/crear-grupo" />
+            <Route
+                element={<InfoRutas />}
+                path="/home/infoRuta/:nombre/:direccion/:longitud/:dificultad/:lat/:lng"
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
