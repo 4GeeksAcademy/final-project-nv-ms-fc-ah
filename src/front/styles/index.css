@@ -1,6 +1,7 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
 .card_rutas:hover {
   width: 352px;
 }
@@ -22,3 +23,4 @@
   border-radius: 8px; /* Esquinas redondeadas del formulario */
   padding: 20px;
 }
+

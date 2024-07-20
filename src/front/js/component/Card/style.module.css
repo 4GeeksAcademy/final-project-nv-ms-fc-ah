@@ -1,9 +1,12 @@
 .container_card {
+  transition: 0.8s;
   width: 390px;
   height: auto;
   margin-top: 2rem;
   padding: 1px;
+  box-sizing: border-box;
   transition: 0.6s;
+  border-radius: 5%;
 }
 
 .card_img,
@@ -24,12 +27,14 @@ img {
 .card_text_footer {
   margin-top: 1rem;
   display: flex;
-  justify-content: space-around;
+  padding: 0px 1rem;
+  justify-content: space-between;
   font-size: 1rem;
 }
 
 .container_card:hover {
+  width: 395px;
   cursor: pointer;
   border-radius: 5%;
-  box-shadow: 4px 6px 5px 0px rgba(147, 147, 147, 0.56);
+  box-shadow: 10px 10px 10px 0px rgba(8, 8, 8, 0.56);
 }

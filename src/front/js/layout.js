@@ -6,9 +6,12 @@ import { Landing } from "./pages/landing";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { Home } from "./pages/home";
+import { Grupos } from "./pages/grupos";
+import { CrearGrupo } from "./pages/crearGrupo";
 import injectContext from "./store/appContext";
 
 import Senderos from "./component/senderos";
+import InfoRutas from "./component/infoRutas";
 
 //create your first component
 const Layout = () => {
@@ -29,6 +32,14 @@ const Layout = () => {
           <Route element={<Home />} path="/home" />
           <Route element={<h1>Not found!</h1>} />
           <Route element={<Senderos />} path="/senderos" />
+
+          <Route element={<Grupos />} path="/grupos" />
+          <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
+          <Route
+            element={<InfoRutas />}
+            path="/infoRuta/:nombre/:direccion/:longitud/:dificultad/:lat/:lng"
+          />
+
         </Routes>
       </BrowserRouter>
     </div>
