@@ -1,3 +1,26 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
+.card_rutas:hover {
+  width: 352px;
+}
+
+.background-image {
+  background-image: url('https://fastly.picsum.photos/id/190/2048/1365.jpg?hmac=NWS1_X_JJ-Edi-9SZRhNwHyjKt1nECckxrGLS8_idjY');
+  background-size: cover; /* Ajusta la imagen al tamaño del contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita la repetición de la imagen */
+  min-height: 100vh; /* Asegura que el fondo cubra toda la altura de la vista */
+}
+
+.white-text {
+  color: white;
+}
+
+.form-background {
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
+  border-radius: 8px; /* Esquinas redondeadas del formulario */
+  padding: 20px;
+}
+

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Landing } from "./pages/landing";
@@ -11,7 +10,6 @@ import { Grupos } from "./pages/grupos";
 import { CrearGrupo } from "./pages/crearGrupo";
 import injectContext from "./store/appContext";
 
-import { Footer } from "./component/footer";
 import Senderos from "./component/senderos";
 import InfoRutas from "./component/infoRutas";
 
