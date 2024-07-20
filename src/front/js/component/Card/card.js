@@ -3,9 +3,9 @@ import { GiPathDistance } from "react-icons/gi";
 import { GiMountainClimbing } from "react-icons/gi";
 import style from "../Card/style.module.css";
 
-const Card = ({ img, nombre, ubicacion, longitud, exigencia }) => {
+const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick }) => {
   return (
-    <div className={style.container_card}>
+    <div onClick={onClick} className={style.container_card}>
       <div className={style.card_img}>
         <img src={img} alt="" />
       </div>
@@ -15,8 +15,18 @@ const Card = ({ img, nombre, ubicacion, longitud, exigencia }) => {
           <p>{ubicacion}</p>
         </div>
         <div className={style.card_text_footer}>
-          <p>{longitud}</p>
-          <p>{exigencia}</p>
+          <p className="fw-bolder">
+            <span className="me-2">
+              <GiPathDistance />
+            </span>
+            {longitud}
+          </p>
+          <p className="fw-bolder">
+            <span className="me-2">
+              <GiMountainClimbing />
+            </span>
+            {exigencia}
+          </p>
         </div>
       </div>
     </div>

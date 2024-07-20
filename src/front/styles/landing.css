@@ -1,58 +1,58 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 .landing-page {
-    position: relative;
-    width: 100%;
-    height: 80vh;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
 }
 
 .background-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    background-size: cover; /* Ensures the image covers the entire container */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    opacity: 0;
-    animation: fadeInOut 20s infinite;
-    animation-timing-function: ease-in-out; /* Smooths the transition */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background-size: cover; /* Ensures the image covers the entire container */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  opacity: 0;
+  animation: fadeInOut 20s infinite;
+  animation-timing-function: ease-in-out; /* Smooths the transition */
 }
 
 @keyframes fadeInOut {
-    0% {
-        background-image: url('https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68');
-        opacity: 0;
-    }
-    25% {
-        background-image: url('https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68');
-        opacity: 1;
-    }
-    50% {
-        background-image: url('https://fastly.picsum.photos/id/11/2500/1667.jpg?hmac=xxjFJtAPgshYkysU_aqx2sZir-kIOjNR9vx0te7GycQ');
-        opacity: 1;
-    }
-    75% {
-        background-image: url('https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4');
-        opacity: 1;
-    }
-    100% {
-        background-image: url('https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4');
-        opacity: 0;
-    }
+  0% {
+    background-image: url("https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68");
+    opacity: 0;
+  }
+  25% {
+    background-image: url("https://fastly.picsum.photos/id/10/2500/1667.jpg?hmac=J04WWC_ebchx3WwzbM-Z4_KC_LeLBWr5LZMaAkWkF68");
+    opacity: 1;
+  }
+  50% {
+    background-image: url("https://fastly.picsum.photos/id/11/2500/1667.jpg?hmac=xxjFJtAPgshYkysU_aqx2sZir-kIOjNR9vx0te7GycQ");
+    opacity: 1;
+  }
+  75% {
+    background-image: url("https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4");
+    opacity: 1;
+  }
+  100% {
+    background-image: url("https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4");
+    opacity: 0;
+  }
 }
 
 .landing-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    color: white;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
 }
