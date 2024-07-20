@@ -11,6 +11,7 @@ import injectContext from "./store/appContext";
 
 import { Footer } from "./component/footer";
 import Senderos from "./component/senderos";
+import InfoRutas from "./component/infoRutas";
 
 //create your first component
 const Layout = () => {
@@ -31,6 +32,10 @@ const Layout = () => {
           <Route element={<Home />} path="/home" />
           <Route element={<h1>Not found!</h1>} />
           <Route element={<Senderos />} path="/senderos" />
+          <Route
+            element={<InfoRutas />}
+            path="/infoRuta/:nombre/:direccion/:longitud/:dificultad/:lat/:lng"
+          />
         </Routes>
       </BrowserRouter>
     </div>
