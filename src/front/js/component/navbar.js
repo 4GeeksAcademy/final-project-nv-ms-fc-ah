@@ -28,15 +28,20 @@ export const Navbar = () => {
           SenderosApp
         </h3>
         <ul className="navbar-nav d-flex flex-row mb-0">
+        <li className="nav-item me-3">
+            <Link to={"/home"} className="nav-link" href="#">
+              Inicio
+            </Link>
+          </li>
           <li className="nav-item me-3">
             <Link to={"/senderos"} className="nav-link" href="#">
               Senderos
             </Link>
           </li>
           <li className="nav-item me-3">
-            <a className="nav-link" href="#">
+            <Link to={"/grupos"} className="nav-link" href="#">
               Grupos
-            </a>
+            </Link>
           </li>
           <li className="nav-item me-3">
             <a className="nav-link" href="#">

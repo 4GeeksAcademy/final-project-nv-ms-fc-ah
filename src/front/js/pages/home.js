@@ -3,6 +3,7 @@ import { Navbar } from "../component/navbar";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Carousel } from "../component/carousel";
+import { Footer } from "../component/footer";
 
 export const Home = () => {
   const [userData, setUserData] = useState();
@@ -63,6 +64,7 @@ export const Home = () => {
         <br />
       </div>
       <Carousel />
+      <Footer />
     </>
   );
 };
