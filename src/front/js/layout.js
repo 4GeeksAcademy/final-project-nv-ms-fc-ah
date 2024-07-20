@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Landing } from "./pages/landing";
@@ -9,7 +8,6 @@ import { Register } from "./pages/register";
 import { Home } from "./pages/home";
 import injectContext from "./store/appContext";
 
-import { Footer } from "./component/footer";
 import Senderos from "./component/senderos";
 
 //create your first component
