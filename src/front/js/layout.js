@@ -27,33 +27,18 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <Routes>
-          
           <Route element={<Landing />} path="/" />
           <Route element={<Login />} path="/login" />
           <Route element={<Register />} path="/register" />
-<<<<<<< HEAD
-          <Route element={<Home />} path="/home" />
-          <Route element={<h1>Not found!</h1>} />
-          <Route element={<Senderos />} path="/senderos" />
-
-          <Route element={<Grupos />} path="/grupos" />
-          <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
-          <Route
-            element={<InfoRutas />}
-            path="/infoRuta/:nombre"
-          />
-=======
           <Route element={<Protegido />}>
-            <Route element={<Home />} path="/home"/>
+            <Route element={<Home />} path="/home" />
             <Route element={<h1>Not found!</h1>} />
             <Route element={<Senderos />} path="/senderos" />
->>>>>>> main
-
             <Route element={<Grupos />} path="/grupos" />
             <Route element={<CrearGrupo />} path="/home/grupos/crear-grupo" />
             <Route
-                element={<InfoRutas />}
-                path="/home/infoRuta/:nombre/:direccion/:longitud/:dificultad/:lat/:lng"
+              element={<InfoRutas />}
+              path="/infoRuta/:nombre"
             />
           </Route>
         </Routes>
