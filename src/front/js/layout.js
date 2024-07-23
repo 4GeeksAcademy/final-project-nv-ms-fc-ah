@@ -37,7 +37,7 @@ const Layout = () => {
           <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
           <Route
             element={<InfoRutas />}
-            path="/infoRuta/:nombre/:direccion/:longitud/:dificultad/:lat/:lng"
+            path="/infoRuta/:nombre"
           />
 
         </Routes>
