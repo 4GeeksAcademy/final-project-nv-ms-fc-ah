@@ -119,53 +119,6 @@ def create_group():
         db.session.close()
     return jsonify(serialized_group), 201
 
-
-
-@api.route('/paths', methods=['POST'])
-@jwt_required()
-def create_path():
-    request_body = request.get_json()
-    title_name = request_body.get("Title_name", None)
-    description = request_body.get("Description", None)
-    direction = request_body.get("Direction", None)
-
-    if not title_name or not description or not direction:
-        return jsonify({"error": "Title name, description and direction are required"}), 401
-
-    new_path = Path(
-        Title_name=title_name,
-        Description=description,
-        Direction=direction
-    )
-
-    db.session.add(new_path)
-    db.session.commit()
-
-    return jsonify(new_path.serialize()), 201
-
-
-@api.route('/favorite_paths', methods=['POST'])
-@jwt_required()
-def add_favorite_path():
-    request_body = request.get_json()
-    user_id = request_body.get("user_id", None)
-    path_id = request_body.get("path_id", None)
-
-    if not user_id or not path_id:
-        return jsonify({"error": "User ID and path ID are required"}), 401
-
-    new_favorite_path = Favorite_paths(
-        user_id=user_id,
-        path_id=path_id
-    )
-
-    db.session.add(new_favorite_path)
-    db.session.commit()
-
-    return jsonify(new_favorite_path.serialize()), 201
-
-
-
 @api.route('/add_group_members', methods=['POST'])
 @jwt_required()
 def add_group_member():
@@ -204,3 +157,49 @@ def get_members():
  
 
     return jsonify([member.serialize() for member in group_members]), 200
+
+@api.route('/paths', methods=['POST'])
+@jwt_required()
+def create_path():
+    request_body = request.get_json()
+    title_name = request_body.get("Title_name", None)
+    description = request_body.get("Description", None)
+    direction = request_body.get("Direction", None)
+
+    if not title_name or not description or not direction:
+        return jsonify({"error": "Title name, description and direction are required"}), 401
+
+    new_path = Path(
+        Title_name=title_name,
+        Description=description,
+        Direction=direction
+    )
+
+    db.session.add(new_path)
+    db.session.commit()
+
+    return jsonify(new_path.serialize()), 201
+
+@api.route('/favorite_paths', methods=['POST'])
+@jwt_required()
+def add_favorite_path():
+    request_body = request.get_json()
+    user_id = request_body.get("user_id", None)
+    path_id = request_body.get("path_id", None)
+
+    if not user_id or not path_id:
+        return jsonify({"error": "User ID and path ID are required"}), 401
+
+    new_favorite_path = Favorite_paths(
+        user_id=user_id,
+        path_id=path_id
+    )
+
+    db.session.add(new_favorite_path)
+    db.session.commit()
+
+    return jsonify(new_favorite_path.serialize()), 201
+
+
+
+

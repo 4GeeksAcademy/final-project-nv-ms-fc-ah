@@ -149,21 +149,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			userCreateGroup: async (group_name, path_id) => {
+			userCreateGroup: async (group_name) => {
 				try{
 					const token = sessionStorage.getItem("accessToken")
 					if (!token) {
 						throw new Error ("Falta el token de acceso.");
 					}
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/groups",{
+					const resp = await fetch(process.env.BACKEND_URL + "/api/create_group",{
 						method:"POST",
 						headers: {
 							"Content-type" : "application/json",
 							Authorization: `Bearer ${token}`
 
 						},
-						body: JSON.stringify({ group_name, path_Id })
+						body: JSON.stringify({ group_name })
 					});
 					
 					const data = await resp.json();
