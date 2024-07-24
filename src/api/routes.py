@@ -84,25 +84,41 @@ def handle_private():
     return jsonify({"id": user.id, "email": user.email}), 200
 
 
-@api.route('/groups', methods=['POST'])
+@api.route('/create_group', methods=['POST'])
 @jwt_required()
 def create_group():
+    
     request_body = request.get_json()
-    group_name = request_body.get("name", None)
-    path_id = request_body.get("path_id", None)
+    user_id = request_body.get("user_id", None)
+    group_name = request_body.get("group_name", None)
 
-    if not group_name or not path_id:
-        return jsonify({"error": "Group name and path ID are required"}), 401
+    if not group_name:
+        return jsonify({"error": "Group name is required"}), 401
 
     new_group = Group(
         name=group_name,
-        path_id=path_id
     )
 
-    db.session.add(new_group)
-    db.session.commit()
+    try:
+        db.session.add(new_group)
+        db.session.commit()
+        db.session.refresh(new_group) # se agrega refresh para refrescar el objeto recien creado..
+        first_member_group = GroupMember(
+            user_id=user_id,
+            group_id=new_group.id,
+            role="admin"
+        )
+        db.session.add(first_member_group)
+        db.session.commit()
+        serialized_group = new_group.serialize() # se serializa el grupo, antes de cerrar la sesión.
+    except Exception as error:
+        db.session.rollback()
+        print(error)
+        return jsonify({"error": str(error)}), 500
+    finally:
+        db.session.close()
+    return jsonify(serialized_group), 201
 
-    return jsonify(new_group.serialize()), 201
 
 
 @api.route('/paths', methods=['POST'])
@@ -149,7 +165,8 @@ def add_favorite_path():
     return jsonify(new_favorite_path.serialize()), 201
 
 
-@api.route('/group_members', methods=['POST'])
+
+@api.route('/add_group_members', methods=['POST'])
 @jwt_required()
 def add_group_member():
     request_body = request.get_json()
@@ -170,3 +187,20 @@ def add_group_member():
     db.session.commit()
 
     return jsonify(new_group_member.serialize()), 201
+
+@api.route('/group/members', methods=['GET'])
+def get_members():
+
+    request_body = request.get_json()
+    group_id = request_body.get("group_id", None)
+    
+    group_members = GroupMember.query.filter_by(group_id=group_id).all()
+    print(group_members)
+
+
+
+    if not group_members:
+       return jsonify({"Mensaje": "Miembros no encontrados."}), 404
+ 
+
+    return jsonify([member.serialize() for member in group_members]), 200

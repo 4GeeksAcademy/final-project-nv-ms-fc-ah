@@ -130,6 +130,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await resp.json();
 
+					console.log(data);
+
 					if(!resp.ok){
 						throw new Error(data.msg || "Error al obtener datos protegidos.");
 					}
@@ -143,6 +145,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				} catch (error) {
 					console.error("Error al obtener datos protegidos.", error);
+					throw error;
+				}
+			},
+
+			userCreateGroup: async (group_name, path_id) => {
+				try{
+					const token = sessionStorage.getItem("accessToken")
+					if (!token) {
+						throw new Error ("Falta el token de acceso.");
+					}
+					// fetching data from the backend
+					const resp = await fetch(process.env.BACKEND_URL + "/api/groups",{
+						method:"POST",
+						headers: {
+							"Content-type" : "application/json",
+							Authorization: `Bearer ${token}`
+
+						},
+						body: JSON.stringify({ group_name, path_Id })
+					});
+					
+					const data = await resp.json();
+
+					if (!resp.ok) {
+						throw new Error(data.msg || "Error al crear grupo.");
+					}
+					
+					return data;
+				}catch(error){
+					console.log("Error al crear grupo", error)
 					throw error;
 				}
 			}
