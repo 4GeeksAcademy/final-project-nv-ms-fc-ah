@@ -90,3 +90,46 @@ img {
   height: 100%;
   box-shadow: 0px 0px 14px 0px rgba(147, 146, 147, 0.92);
 }
+/*media queries c */
+
+
+
+/*media queries infoRutas*/
+@media (min-width: 400px) and (max-width: 1134px) {
+  .content_infoRuta {
+    transition: 0.5s;
+    margin-top: 5rem;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(210, 203, 203, 0.1);
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+
+  .img_infoRuta {
+    width: 100%;
+    height: 33%;
+    margin-left: 1rem;
+  }
+
+  .datos_infoRuta {
+    width: 100%;
+    height: 33%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 1rem;
+    margin: 2rem 0;
+  }
+
+  .map_infoRuta {
+    width: 100%;
+    height: 300px;
+  }
+}
