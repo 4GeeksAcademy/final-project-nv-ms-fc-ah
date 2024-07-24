@@ -99,26 +99,25 @@ def create_group():
         name=group_name,
     )
 
-    try: 
+    try:
         db.session.add(new_group)
-        db.session.flush()  # Flush to get the new_group.id
-
+        db.session.commit()
+        db.session.refresh(new_group) # se agrega refresh para refrescar el objeto recien creado..
         first_member_group = GroupMember(
-            user_id=user_id, 
-            group_id=new_group.id, 
+            user_id=user_id,
+            group_id=new_group.id,
             role="admin"
         )
-
         db.session.add(first_member_group)
         db.session.commit()
-    except Exception as error: 
+        serialized_group = new_group.serialize() # se serializa el grupo, antes de cerrar la sesión.
+    except Exception as error:
         db.session.rollback()
         print(error)
         return jsonify({"error": str(error)}), 500
-    finally: 
+    finally:
         db.session.close()
-
-    return jsonify(new_group.serialize()), 201
+    return jsonify(serialized_group), 201
 
 
 
