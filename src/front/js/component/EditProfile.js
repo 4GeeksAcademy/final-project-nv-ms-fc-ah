@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Form, Container, Row, Col, Image, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './EditProfile.css';
+import { GiMountains } from "react-icons/gi";
+
 const EditProfile = () => {
   // URL de Cloudinary y el preset de carga
   const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfle6uz4i/image/upload';
@@ -93,12 +95,17 @@ const EditProfile = () => {
     <>
       {/* Barra de navegación */}
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <Container>
-          <a className="navbar-brand" href="#">SenderosApp</a>
-          <div className="collapse navbar-collapse">
-            <ul className="navbar-nav ml-auto">
+        <Container className="d-flex justify-content-between align-items-center" >
+        <h3 className="text-start fw-bolder d-flex align-items-center">
+          <span className="me-2 h1">
+            <GiMountains />
+          </span>
+          SenderosApp
+        </h3>
+          <div className="collapse navbar-collapse d-flex justify-content-end">
+            <ul className="navbar-nav d-flex align-items-center">
               <li className="nav-item">
-                <Button variant="link" onClick={handleGoBack}>Volver a Perfil</Button>
+                <Button variant="danger" onClick={handleGoBack}>Volver a Perfil</Button>
               </li>
             </ul>
           </div>
