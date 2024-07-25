@@ -69,6 +69,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 					
 					sessionStorage.setItem("accessToken", data.token);
+					// Asume que el backend solo devuelve el user_id
+					setStore({
+						user: {
+							id: data.user_id // Ajusta para la estructura actual del backend
+						}
+					});
 					// don't forget to return something, that is how the async resolves
 					return data;
 				}catch(error){
@@ -177,7 +183,62 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error al crear grupo", error)
 					throw error;
 				}
-			}
+			},
+			userData: async () => {
+				const { user } = getStore();
+				if (!user || !user.id) {
+					throw new Error('El ID del usuario no está disponible.');
+				}
+				const url = `${process.env.BACKEND_URL}/api/user/${user.id}`;
+				try {
+					const resp = await fetch(url, {
+						headers: { "Content-type": "application/json" },
+					});
+					if (!resp.ok) {
+						const errorDetails = await resp.json();
+						throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
+					}
+					const data = await resp.json();
+					// Actualiza el estado con los datos del usuario
+					setStore({
+						user: {
+							...user, // Mantén la información del usuario existente
+							...data // Actualiza con la nueva información
+						}
+					});
+					return data;
+				} catch (error) {
+					console.error("Error al obtener datos del usuario.", error);
+					throw error;
+				}
+			},
+			changePassword: async (email, newPassword) => {
+				try {
+					// Llamada a la API para cambiar la contraseña
+					const resp = await fetch(process.env.BACKEND_URL + "/api/change_password", {
+						method: "PUT",
+						headers: {
+							"Content-type": "application/json",
+						},
+						body: JSON.stringify({ email, password: newPassword }),
+					});
+
+					const data = await resp.json();
+
+					if (!resp.ok) {
+						throw new Error(data.msg || "Error al cambiar la contraseña.");
+					}
+
+					// Opcional: Maneja la respuesta del backend si es necesario
+					console.log('Contraseña cambiada exitosamente', data);
+
+					// Retorna los datos (opcional)
+					return data;
+				} catch (error) {
+					console.error("Error al cambiar la contraseña:", error);
+					throw error;
+				}
+			},
 		}
 	};
 };
