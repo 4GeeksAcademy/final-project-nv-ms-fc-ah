@@ -13,6 +13,8 @@ import injectContext from "./store/appContext";
 
 import Senderos from "./component/senderos";
 import InfoRutas from "./component/infoRutas";
+import UserProfile from "./component/UserProfile";
+import EditProfile from "./component/EditProfile";
 
 //create your first component
 const Layout = () => {
@@ -36,6 +38,8 @@ const Layout = () => {
             <Route element={<Senderos />} path="/senderos" />
             <Route element={<Grupos />} path="/grupos" />
             <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
+            <Route element={<UserProfile />} path="/userprofile" />
+            <Route element={<EditProfile />} path="/editprofile" />
             <Route
               element={<InfoRutas />}
               path="/infoRuta/:nombre"
