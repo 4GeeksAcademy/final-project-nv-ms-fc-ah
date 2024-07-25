@@ -1,81 +1,91 @@
-import React, { useState, useContext, useEffect } from 'react'; // Importa hooks y contextos necesarios de React
-import { useNavigate } from 'react-router-dom'; // Hook para navegar a otras rutas
-import { Context } from '../store/appContext'; // Importa el contexto que contiene el store y las acciones
-import { Container, Button } from 'react-bootstrap'; // Componentes de Bootstrap para el diseño
-import 'bootstrap/dist/css/bootstrap.min.css'; // Importa estilos de Bootstrap
-// import 'bootstrap-icons/font/bootstrap-icons.css'; // Importa íconos de Bootstrap
-import './UserProfile.css'; // Importa los estilos específicos del componente
+import React, { useState, useContext, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Context } from '../store/appContext';
+import { Container, Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './UserProfile.css';
+import { GiMountains } from "react-icons/gi";
+
 const UserProfile = () => {
-  const { store, actions } = useContext(Context); // Extrae el store y las acciones del contexto
-  const [user, setUser] = useState({ name: '', email: '', imageUrl: '' }); // Define el estado local del componente
-  const [showChangePassword, setShowChangePassword] = useState(false); // Estado para controlar la visibilidad del formulario de cambio de contraseña
-  const [newPassword, setNewPassword] = useState(''); // Estado para almacenar la nueva contraseña
-  const [confirmPassword, setConfirmPassword] = useState(''); // Estado para almacenar la confirmación de la nueva contraseña
-  const [error, setError] = useState(''); // Estado para manejar los mensajes de error
-  const navigate = useNavigate(); // Hook para manejar la navegación
+  const [userData, setUserData] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false); // Definir estado
+  const [newPassword, setNewPassword] = useState(''); // Definir estado
+  const [confirmPassword, setConfirmPassword] = useState(''); // Definir estado
+  const [error, setError] = useState('');
+  const { actions, store } = useContext(Context);
+  const { user } = store;
+  const navigate = useNavigate();
+  const didFetchData = useRef(false);
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        // Llama a la acción userHome para obtener y actualizar los datos completos del usuario
-        await actions.userHome();
-        setUser(store.user); // Actualiza el estado local con los datos del usuario
-      } catch (error) {
-        console.error('Error al obtener los datos del usuario:', error);
-        setError('No se pudo obtener la información del usuario.'); // Manejo de errores
-      }
-    };
-    const storedUsername = localStorage.getItem('username'); // Obtén el nombre de usuario de localStorage
-    if (storedUsername) {
-      setUser(prevState => ({ ...prevState, name: storedUsername })); // Actualiza el estado local con el nombre de usuario
+    const isLoggedIn = sessionStorage.getItem('accessToken');
+    if (!isLoggedIn) {
+      navigate('/');
+      return;
     }
-    fetchUserData(); // Llama a la función para obtener los datos del usuario
-  }, [actions, store.user]); // Dependencias del useEffect
+    // Asegurarse de que la solicitud solo se haga una vez
+    if (!didFetchData.current && user) {
+      didFetchData.current = true;
+      actions.userData()
+        .then(data => setUserData(data))
+        .catch(error => {
+          console.error('Error al obtener los datos del usuario:', error.message);
+          setError('No se pudo obtener la información del usuario.');
+        });
+    }
+  }, [user, navigate, actions]);
   const handleEditClick = () => {
-    navigate('/editprofile'); // Redirige al usuario a la página de edición del perfil
+    navigate('/editprofile');
   };
   const handleChangePasswordClick = () => {
-    setShowChangePassword(!showChangePassword); // Alterna la visibilidad del formulario
-    setError(''); // Resetea el mensaje de error
+    setShowChangePassword(!showChangePassword);
+    setError('');
   };
   const handlePasswordChange = async (e) => {
-    e.preventDefault(); // Previene el comportamiento por defecto del formulario
-    if (newPassword === confirmPassword) { // Verifica que las contraseñas coincidan
+    e.preventDefault();
+    if (newPassword === confirmPassword) {
       try {
-        await actions.changePassword(user.email, newPassword); // Llama a la acción para cambiar la contraseña
-        console.log('Contraseña cambiada exitosamente'); // Mensaje en consola para depuración
-        setShowChangePassword(false); // Oculta el formulario de cambio de contraseña
+        await actions.changePassword(user.email, newPassword);
+        console.log('Contraseña cambiada exitosamente');
+        setShowChangePassword(false);
       } catch (error) {
-        console.error('Error al cambiar la contraseña:', error.message); // Manejo de errores
-        setError('No se pudo cambiar la contraseña.'); // Mensaje de error
+        console.error('Error al cambiar la contraseña:', error.message);
+        setError('No se pudo cambiar la contraseña.');
       }
     } else {
-      setError('Las contraseñas no coinciden.'); // Mensaje de error si las contraseñas no coinciden
+      setError('Las contraseñas no coinciden.');
     }
   };
   const handleCancelChangePassword = () => {
-    setShowChangePassword(false); // Oculta el formulario de cambio de contraseña
-    setError(''); // Resetea el mensaje de error
+    setShowChangePassword(false);
+    setError('');
   };
   const handleGoBack = () => {
-    navigate('/home'); // Redirige al usuario a la página de inicio
+    navigate('/home');
   };
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <Container>
-          <a className="navbar-brand" href="#">SenderosApp</a>
-          <div className="collapse navbar-collapse">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <span className="navbar-text me-3">Hola, {userData.username}</span> {/* Muestra el nombre del usuario */}
-              </li>
-              <li className="nav-item">
-                <Button variant="link" onClick={handleGoBack}>Volver a Home</Button>
-              </li>
-            </ul>
-          </div>
-        </Container>
-      </nav>
+      <Container className="d-flex justify-content-between align-items-center">
+        <h3 className="text-start fw-bolder d-flex align-items-center">
+          <span className="me-2 h1">
+            <GiMountains />
+          </span>
+          SenderosApp
+        </h3>
+        <div className="collapse navbar-collapse d-flex justify-content-end">
+          <ul className="navbar-nav d-flex align-items-center">
+            <li className="nav-item">
+              <span className="navbar-text me-3">Hola, {userData?.username || 'Usuario'}</span>
+            </li>
+            <li className="nav-item">
+              <Button variant="danger" onClick={handleGoBack} className="ms-auto me-3">
+                Volver a Home
+              </Button>
+            </li>
+          </ul>
+        </div>
+      </Container>
+    </nav>
       <div className="container user-profile mt-5">
         <div className="profile-header position-relative">
           <img
@@ -84,7 +94,7 @@ const UserProfile = () => {
             className="img-fluid w-100 profile-bg"
           />
           <img
-            src={user.imageUrl || "/default-profile.png"}
+            src={userData?.imageUrl || "/default-profile.png"}
             alt="User"
             className="profile-img rounded-circle position-absolute"
             style={{
@@ -98,8 +108,8 @@ const UserProfile = () => {
           />
         </div>
         <div className="profile-info text-center mt-4">
-          <h2>{user.username}</h2> {/* Muestra el nombre del usuario */}
-          <p>{user.email}</p> {/* Muestra el correo electrónico del usuario */}
+          <h2>{userData?.username}</h2>
+          <p>{userData?.email}</p>
           <Button variant="primary" className="me-2" onClick={handleEditClick}>
             Editar Perfil
           </Button>

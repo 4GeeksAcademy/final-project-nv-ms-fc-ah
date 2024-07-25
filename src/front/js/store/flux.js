@@ -212,6 +212,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
+			changePassword: async (email, newPassword) => {
+				try {
+					// Llamada a la API para cambiar la contraseña
+					const resp = await fetch(process.env.BACKEND_URL + "/api/change_password", {
+						method: "PUT",
+						headers: {
+							"Content-type": "application/json",
+						},
+						body: JSON.stringify({ email, password: newPassword }),
+					});
+
+					const data = await resp.json();
+
+					if (!resp.ok) {
+						throw new Error(data.msg || "Error al cambiar la contraseña.");
+					}
+
+					// Opcional: Maneja la respuesta del backend si es necesario
+					console.log('Contraseña cambiada exitosamente', data);
+
+					// Retorna los datos (opcional)
+					return data;
+				} catch (error) {
+					console.error("Error al cambiar la contraseña:", error);
+					throw error;
+				}
+			},
 		}
 	};
 };
