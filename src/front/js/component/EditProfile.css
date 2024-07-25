@@ -1,0 +1,34 @@
+.background-image {
+    background-image: url('https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    padding-top: 20px;
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+  }
+  .navbar {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  .card {
+    background-color: rgba(255, 255, 255, 0.8);
+    max-height: 90vh; /* Limita la altura máxima del card */
+    overflow-y: auto; /* Permite el desplazamiento vertical dentro del card */
+    padding: 20px; /* Agrega padding dentro de la tarjeta */
+  }
+  .card-body {
+    padding: 20px; /* Asegura que haya suficiente espacio dentro del card-body */
+  }
+  .card-body h2 {
+    margin-top: 0; /* Elimina el margen superior del título */
+  }
+  .form-group {
+    margin-bottom: 1.5rem; /* Añade separación entre los campos del formulario */
+  }
+  .card-body .d-flex {
+    margin-top: 1.5rem; /* Añade separación entre el formulario y los botones */
+  }
+  .card img {
+    max-width: 100%;
+    height: auto;
+  }

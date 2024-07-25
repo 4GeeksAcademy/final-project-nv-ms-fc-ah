@@ -44,9 +44,9 @@ export const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item me-3">
-            <a className="nav-link" href="#">
+          <Link to= "/userprofile" className="nav-link" >
               Perfil
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
             <Link to="/">

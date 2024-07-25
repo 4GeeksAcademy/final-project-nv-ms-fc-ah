@@ -6,8 +6,8 @@ from api.models import db, User, Group, GroupMember, Path, Favorite_paths
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-
-
+from werkzeug.security import generate_password_hash, check_password_hash # Asegúrate de importar esta función
+from cloudinary.uploader import upload  #cloudinary
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -20,25 +20,22 @@ def handle_register():
     user_email = request_body.get("email", None)
     user_password = request_body.get("password", None)
     user_name = request_body.get("username", None)
-
     if not user_email or not user_password:
         return jsonify({"Error": "Email y contraseña son campos requeridos."}), 401
-
+    
     existing_user = User.query.filter_by(email=user_email).first()
     if existing_user:
         return jsonify({"Error": "El usuario ya existe."}), 400
-
+    # Genera el hash de la contraseña
+    hashed_password = generate_password_hash(user_password, method='pbkdf2:sha256')
     new_user = User(
         email=user_email,
-        password=user_password,
+        password=hashed_password, #aca se cambio para especificar que va con hash
         username = user_name
     )
-
     db.session.add(new_user)
     db.session.commit()
-
     return jsonify(new_user.serialize()), 201
-
 
 @api.route('/login', methods=['POST'])
 def handle_login():
@@ -50,9 +47,9 @@ def handle_login():
     if not user_email or not user_password:
         return jsonify({"error": "Email y contraseña son campos requeridos."}), 401
 
-    user = User.query.filter_by(email=user_email, password=user_password).first()
+    user = User.query.filter_by(email=user_email).first()
 
-    if user is None:
+    if user is None or not check_password_hash(user.password, user_password):
         return jsonify({"Error": "Correo o contraseña incorrectos."}), 401
 
     access_token = create_access_token(identity=user.id)
@@ -204,3 +201,68 @@ def get_members():
  
 
     return jsonify([member.serialize() for member in group_members]), 200
+
+@api.route('/change_password', methods=['PUT'])
+def change_password():
+    try:
+        data = request.get_json()
+        if 'email' not in data or 'password' not in data:
+            return jsonify({"msg": "Missing email or password parameter"}), 400
+        email = data['email']
+        new_password = data['password']
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return jsonify({"msg": "User not found"}), 404
+        # Hashear la nueva contraseña
+        user.password = generate_password_hash(new_password, method='pbkdf2:sha256')
+        db.session.commit()
+        # Incluir la nueva contraseña en texto plano en la respuesta
+        return jsonify({"msg": "Password updated successfully", "new_password": new_password}), 200
+    except Exception as e:
+        # Manejar cualquier excepción inesperada
+        return jsonify({"error": "Error al procesar la solicitud", "details": str(e)}), 500
+#ruta para subir imagenes
+@api.route('/upload', methods=['PUT'])
+@jwt_required()
+def upload_image():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+    try:
+        # Subir la imagen a Cloudinary
+        upload_result = cloudinary.uploader.upload(file)
+        return jsonify({"url": upload_result['secure_url']}), 200
+    except Exception as e:
+        return jsonify({"error": "Error uploading image", "details": str(e)}), 500
+@api.route('/image/<string:image_id>', methods=['GET'])
+def get_image(image_id):
+    # Construir la URL de la imagen usando el ID
+    cloud_name = 'dfle6uz4i'  # lo tome de la pagina
+    image_url = f'https://res.cloudinary.com/{dfle6uz4i}/image/upload/{image_id}'
+    image_url = f'https://res.cloudinary.com/dfle6uz4i/image/upload/{image_id}'
+    # Devolver la URL de la imagen en la respuesta
+    return jsonify({"url": image_url}), 200
+@api.route('/update_profile', methods=['POST'])
+def update_profile():
+    try:
+        request_data = request.get_json()
+        name = request_data['name']
+        surname = request_data['surname']
+        email = request_data['email']
+        imageUrl = request_data['imageUrl']
+        backgroundUrl = request_data['backgroundUrl']
+        # Aquí actualizas el perfil del usuario en la base de datos
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.name = name
+            user.surname = surname
+            user.image_url = imageUrl
+            user.background_url = backgroundUrl
+            db.session.commit()
+            return jsonify({"msg": "Perfil actualizado exitosamente"}), 200
+        else:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
