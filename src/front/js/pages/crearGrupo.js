@@ -15,7 +15,7 @@ export const CrearGrupo = () => {
 
     const didFetchData = useRef(false);
     const { user } = store;
-
+    console.log("store",user)
     useEffect(() => {
         const isLoggedIn = sessionStorage.getItem('accessToken');
         if (!isLoggedIn) {
@@ -24,15 +24,15 @@ export const CrearGrupo = () => {
         }
 
         // Debugging
-        console.log("useEffect triggered. User:", user);
+        //console.log("useEffect triggered. User:", user);
 
         if (!didFetchData.current) {
             didFetchData.current = true;
             if (!user) {
-                actions.userData()
+                actions.userHome()
                     .then(data => {
                         // Debugging
-                        console.log("User data fetched and set:", data);
+                        console.log("User data fetched and set, from user home:", data);
                     })
                     .catch(error => {
                         console.error('Error al obtener los datos del usuario:', error.message);
@@ -47,7 +47,7 @@ export const CrearGrupo = () => {
         try {
             console.log("Calling userCreateGroup with:", groupName);
             const response = await actions.userCreateGroup(groupName);
-            if (response.groupName) {
+            if (response.name) {
                 setShowModal(true);
             }
         } catch (error) {

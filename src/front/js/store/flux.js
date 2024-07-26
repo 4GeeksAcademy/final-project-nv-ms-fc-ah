@@ -139,19 +139,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await resp.json();
 
-					console.log(data);
+					console.log("user data", data);
 
 					if(!resp.ok){
 						throw new Error(data.msg || "Error al obtener datos protegidos.");
 					}
 
 					const {user} = getStore();
-				
 
 					if(JSON.stringify(user) !== JSON.stringify(data)){
 						setStore({user: data});
 						console.log("Datos de usuario actualizados en el store.", data)
 					}
+					console.log("get store",user)
+					console.log("set store",data)
+
 				} catch (error) {
 					console.error("Error al obtener datos protegidos.", error);
 					throw error;
@@ -198,6 +200,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			,
 			userData: async () => {
 				const { user } = getStore();
+				console.log("get store from userData",user)
 				if (!user || !user.id) {
 					throw new Error('El ID del usuario no está disponible.');
 				}
