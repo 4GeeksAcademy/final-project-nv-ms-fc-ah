@@ -49,40 +49,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 
-			userLogin: async(email, password) => {
-				try{
-					// fetching data from the backend
+			userLogin: async (email, password) => {
+				try {
 					const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
-						method:"POST",
+						method: "POST",
 						headers: {
-							"Content-type" : "application/json"
-
+							"Content-type": "application/json"
 						},
 						body: JSON.stringify({ email, password })
 					});
-				
+			
 					const data = await resp.json();
-					
+			
 					if (!resp.ok) {
 						throw new Error(data.msg || "Error al iniciar sesión.");
 					}
-					
-					
+			
 					sessionStorage.setItem("accessToken", data.token);
-					// Asume que el backend solo devuelve el user_id
+					
+					// Debugging
+					console.log("Login response data:", data);
+					
 					setStore({
 						user: {
-							id: data.user_id // Ajusta para la estructura actual del backend
+							id: data.user_id // Adjust to match your backend response
 						}
 					});
-					// don't forget to return something, that is how the async resolves
+			
+					// Debugging
+					console.log("User data set in store:", getStore().user);
+			
 					return data;
-				}catch(error){
-					console.log("Error al iniciar sesión.", error)
+				} catch (error) {
+					console.log("Error al iniciar sesión.", error);
 					throw error;
 				}
-
 			},
+			
 
 
 			userRegister: async(email, password, username) => {
@@ -136,56 +139,68 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await resp.json();
 
-					console.log(data);
+					console.log("user data", data);
 
 					if(!resp.ok){
 						throw new Error(data.msg || "Error al obtener datos protegidos.");
 					}
 
 					const {user} = getStore();
-				
 
 					if(JSON.stringify(user) !== JSON.stringify(data)){
 						setStore({user: data});
 						console.log("Datos de usuario actualizados en el store.", data)
 					}
+					console.log("get store",user)
+					console.log("set store",data)
+
 				} catch (error) {
 					console.error("Error al obtener datos protegidos.", error);
 					throw error;
 				}
 			},
 
-			userCreateGroup: async (group_name, path_id) => {
-				try{
-					const token = sessionStorage.getItem("accessToken")
-					if (!token) {
-						throw new Error ("Falta el token de acceso.");
+			userCreateGroup: async (group_name) => {	
+				try {
+					const store = getStore();
+					console.log("Current store state:", store); // Debugging line
+					const { user } = store;
+			
+					if (!user || !user.id) {
+						throw new Error('El ID del usuario no está disponible.');
 					}
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/groups",{
-						method:"POST",
+			
+					const token = sessionStorage.getItem("accessToken");
+					if (!token) {
+						throw new Error("Falta el token de acceso.");
+					}
+			
+					const resp = await fetch(`${process.env.BACKEND_URL}/api/create_group`, {
+						method: "POST",
 						headers: {
-							"Content-type" : "application/json",
+							"Content-Type": "application/json",
 							Authorization: `Bearer ${token}`
-
 						},
-						body: JSON.stringify({ group_name, path_Id })
+						body: JSON.stringify({ user_id: user.id, group_name })
 					});
-					
+			
 					const data = await resp.json();
-
+			
 					if (!resp.ok) {
 						throw new Error(data.msg || "Error al crear grupo.");
 					}
-					
+			
 					return data;
-				}catch(error){
-					console.log("Error al crear grupo", error)
+				} catch (error) {
+					console.log("Error al crear grupo", error);
 					throw error;
 				}
-			},
+			}
+			
+			,
 			userData: async () => {
 				const { user } = getStore();
+				console.log("get store from userData",user)
 				if (!user || !user.id) {
 					throw new Error('El ID del usuario no está disponible.');
 				}
@@ -199,19 +214,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 						throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
 					}
 					const data = await resp.json();
-					// Actualiza el estado con los datos del usuario
+			
+					// Debugging
+					console.log("Fetched user data:", data);
+			
 					setStore({
 						user: {
-							...user, // Mantén la información del usuario existente
-							...data // Actualiza con la nueva información
+							...user, // Maintain existing user info
+							...data // Update with new info
 						}
 					});
+			
+					// Debugging
+					console.log("Updated user in store:", getStore().user);
+			
 					return data;
 				} catch (error) {
 					console.error("Error al obtener datos del usuario.", error);
 					throw error;
 				}
 			},
+			
 			changePassword: async (email, newPassword) => {
 				try {
 					// Llamada a la API para cambiar la contraseña

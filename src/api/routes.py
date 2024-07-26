@@ -8,6 +8,7 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash # Asegúrate de importar esta función
 from cloudinary.uploader import upload  #cloudinary
+from datetime import timedelta
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -52,7 +53,8 @@ def handle_login():
     if user is None or not check_password_hash(user.password, user_password):
         return jsonify({"Error": "Correo o contraseña incorrectos."}), 401
 
-    access_token = create_access_token(identity=user.id)
+    expires = timedelta(days=3)
+    access_token = create_access_token(identity=user.id, expires_delta=expires)
     return jsonify({"token": access_token, "user_id": user.id}), 200
 
 
