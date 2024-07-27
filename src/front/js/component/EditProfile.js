@@ -1,107 +1,118 @@
-import React, { useState } from 'react';
+
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, Container, Row, Col, Image, Card } from 'react-bootstrap';
+import { Button, Form, Container, Row, Col, Image, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './EditProfile.css';
 import { GiMountains } from "react-icons/gi";
+import { Context } from '../store/appContext';
 
 const EditProfile = () => {
-  // URL de Cloudinary y el preset de carga
-  const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dfle6uz4i/image/upload';
-  const CLOUDINARY_UPLOAD_PRESET = 'presents_ react';
-  // Estado inicial del perfil del usuario
-  const [user, setUser] = useState({
-    name: 'Matias',
-    surname: 'Sepulveda',
-    email: 'jsepulveda@gmail.com',
-    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5f-U--xmsKWKluLxeHiDT9e1zE3l2MKGLytTH2_PcWiLX2Jt9enhi-tc9gg&s',
-    backgroundUrl: 'https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg'
-  });
-  // Hook para la navegación
+  const { actions, store } = useContext(Context);
+  const { user } = store;
   const navigate = useNavigate();
-  // Maneja el cambio en los campos de texto del formulario
+  const [userData, setUserData] = useState({
+    username: '',
+    email: '',
+    imageUrl: '',
+    backgroundUrl: ''
+  });
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+  const [showMessage, setShowMessage] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await actions.userData();
+        if (data) {
+          setUserData({
+            username: data.username,
+            email: data.email,
+            imageUrl: data.imageUrl,
+            backgroundUrl: data.backgroundUrl
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
+  }, [actions]);
+
   const handleChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    setUserData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
   };
-  // Maneja el cambio de imagen y carga la imagen en Cloudinary
+
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
+    const type = e.target.dataset.type;
+
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      formData.append('upload_preset', 'presents_react');
+
       try {
-        // Envía la imagen a Cloudinary
-        const response = await fetch(CLOUDINARY_URL, {
+        const response = await fetch('https://api.cloudinary.com/v1_1/dfle6uz4i/image/upload', {
           method: 'POST',
           body: formData
         });
         const result = await response.json();
         if (response.ok) {
-          // Actualiza el estado con la URL de la imagen cargada
-          setUser({
-            ...user,
-            [e.target.dataset.type]: result.secure_url
-          });
+          setUserData(prevData => ({
+            ...prevData,
+            [type]: result.secure_url
+          }));
+          setMessage('Imagen cargada con éxito.');
+          setMessageType('success');
+          setShowMessage(true);
         } else {
-          alert('Error al cargar la imagen.');
+          setMessage('Error al cargar la imagen.');
+          setMessageType('danger');
+          setShowMessage(true);
         }
       } catch (error) {
-        alert('Error al cargar la imagen.');
+        setMessage('Error al cargar la imagen.');
+        setMessageType('danger');
+        setShowMessage(true);
       }
     }
   };
-  // Maneja la acción de guardar los cambios del perfil
+
   const handleSave = async () => {
-    // Crea un objeto con los datos del perfil
-    const updatedProfile = {
-      name: user.name,
-      surname: user.surname,
-      email: user.email,
-      imageUrl: user.imageUrl,
-      backgroundUrl: user.backgroundUrl
-    };
     try {
-      // Envía los datos al backend para actualizar el perfil
-      const response = await fetch('/update_profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedProfile),
-      });
-      if (response.ok) {
-        // Si la respuesta es exitosa, redirige al perfil del usuario
+      const result = await actions.updateProfile(userData);
+      if (result) {
         alert('Perfil actualizado.');
-        navigate('/UserProfile');  // Redirige al perfil del usuario
+        navigate('/UserProfile');
       } else {
-        // Si hay un error, muestra el mensaje de error
-        const result = await response.json();
-        alert(`Error: ${result.error}`);
+        alert('Error al actualizar el perfil.');
       }
     } catch (error) {
-      // Muestra un mensaje de error si ocurre una excepción
+      console.error('Error updating profile:', error);
       alert('Error al actualizar el perfil.');
     }
   };
-  // Maneja la acción de volver al perfil del usuario
+
   const handleGoBack = () => {
     navigate('/UserProfile');
   };
+
   return (
     <>
-      {/* Barra de navegación */}
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <Container className="d-flex justify-content-between align-items-center" >
-        <h3 className="text-start fw-bolder d-flex align-items-center">
-          <span className="me-2 h1">
-            <GiMountains />
-          </span>
-          SenderosApp
-        </h3>
+        <Container className="d-flex justify-content-between align-items-center">
+          <h3 className="text-start fw-bolder d-flex align-items-center">
+            <span className="me-2 h1">
+              <GiMountains />
+            </span>
+            SenderosApp
+          </h3>
           <div className="collapse navbar-collapse d-flex justify-content-end">
             <ul className="navbar-nav d-flex align-items-center">
               <li className="nav-item">
@@ -111,7 +122,6 @@ const EditProfile = () => {
           </div>
         </Container>
       </nav>
-      {/* Contenedor de la página de edición del perfil */}
       <div className="background-image">
         <Container className="py-5">
           <Row className="justify-content-center">
@@ -119,38 +129,37 @@ const EditProfile = () => {
               <Card className="p-4 bg-light shadow-sm">
                 <Card.Body>
                   <h2 className="text-center mb-4">Editar Perfil</h2>
+                  {showMessage && (
+                    <Alert variant={messageType} onClose={() => setShowMessage(false)} dismissible>
+                      {message}
+                    </Alert>
+                  )}
+                  <div className="image-preview text-center mb-4">
+                    <Image
+                      src={userData.imageUrl || '/path/to/placeholder-profile.png'}
+                      alt="Profile"
+                      className={`profile-image ${userData.imageUrl ? 'loaded' : ''}`}
+                    />
+                  </div>
                   <Form>
-                    {/* Campo para el nombre del usuario */}
-                    <Form.Group controlId="formName">
-                      <Form.Label>Nombre</Form.Label>
+                    <Form.Group controlId="formUsername">
+                      <Form.Label>Nombre de Usuario</Form.Label>
                       <Form.Control
                         type="text"
-                        name="name"
-                        value={user.name}
+                        name="username"
+                        value={userData.username}
                         onChange={handleChange}
                       />
                     </Form.Group>
-                    {/* Campo para el apellido del usuario */}
-                    <Form.Group controlId="formSurname" className="mt-3">
-                      <Form.Label>Apellido</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="surname"
-                        value={user.surname}
-                        onChange={handleChange}
-                      />
-                    </Form.Group>
-                    {/* Campo para el correo electrónico del usuario */}
                     <Form.Group controlId="formEmail" className="mt-3">
                       <Form.Label>Correo Electrónico</Form.Label>
                       <Form.Control
                         type="email"
                         name="email"
-                        value={user.email}
+                        value={userData.email}
                         onChange={handleChange}
                       />
                     </Form.Group>
-                    {/* Campo para cargar la imagen de perfil */}
                     <Form.Group controlId="formImageUrl" className="mt-3">
                       <Form.Label>Imagen de Perfil</Form.Label>
                       <Form.Control
@@ -158,9 +167,7 @@ const EditProfile = () => {
                         data-type="imageUrl"
                         onChange={handleImageChange}
                       />
-                      <Image src={user.imageUrl} alt="Profile" className="mt-2 rounded-circle" style={{ width: '150px', height: '150px' }} />
                     </Form.Group>
-                    {/* Campo para cargar la imagen de fondo */}
                     <Form.Group controlId="formBackgroundUrl" className="mt-3">
                       <Form.Label>Imagen de Fondo</Form.Label>
                       <Form.Control
@@ -168,9 +175,14 @@ const EditProfile = () => {
                         data-type="backgroundUrl"
                         onChange={handleImageChange}
                       />
-                      <Image src={user.backgroundUrl} alt="Background" className="mt-2" fluid />
                     </Form.Group>
-                    {/* Botones para guardar los cambios o volver al perfil */}
+                    <div className="image-preview mt-2">
+                      <Image
+                        src={userData.backgroundUrl || '/path/to/placeholder-background.png'}
+                        alt="Background"
+                        className="background-preview"
+                      />
+                    </div>
                     <div className="d-flex justify-content-between mt-4">
                       <Button variant="secondary" onClick={handleGoBack}>Volver al Perfil</Button>
                       <Button variant="primary" onClick={handleSave}>Guardar</Button>
@@ -185,4 +197,7 @@ const EditProfile = () => {
     </>
   );
 };
+
 export default EditProfile;
+
+

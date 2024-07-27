@@ -221,48 +221,35 @@ def change_password():
     except Exception as e:
         # Manejar cualquier excepción inesperada
         return jsonify({"error": "Error al procesar la solicitud", "details": str(e)}), 500
-#ruta para subir imagenes
-@api.route('/upload', methods=['PUT'])
-@jwt_required()
-def upload_image():
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
-    try:
-        # Subir la imagen a Cloudinary
-        upload_result = cloudinary.uploader.upload(file)
-        return jsonify({"url": upload_result['secure_url']}), 200
-    except Exception as e:
-        return jsonify({"error": "Error uploading image", "details": str(e)}), 500
-@api.route('/image/<string:image_id>', methods=['GET'])
-def get_image(image_id):
-    # Construir la URL de la imagen usando el ID
-    cloud_name = 'dfle6uz4i'  # lo tome de la pagina
-    image_url = f'https://res.cloudinary.com/{dfle6uz4i}/image/upload/{image_id}'
-    image_url = f'https://res.cloudinary.com/dfle6uz4i/image/upload/{image_id}'
-    # Devolver la URL de la imagen en la respuesta
-    return jsonify({"url": image_url}), 200
-@api.route('/update_profile', methods=['POST'])
+
+@api.route('/update_profile', methods=['PUT'])
 def update_profile():
     try:
-        request_data = request.get_json()
-        name = request_data['name']
-        surname = request_data['surname']
-        email = request_data['email']
-        imageUrl = request_data['imageUrl']
-        backgroundUrl = request_data['backgroundUrl']
-        # Aquí actualizas el perfil del usuario en la base de datos
-        user = User.query.filter_by(email=email).first()
-        if user:
-            user.name = name
-            user.surname = surname
-            user.image_url = imageUrl
-            user.background_url = backgroundUrl
-            db.session.commit()
-            return jsonify({"msg": "Perfil actualizado exitosamente"}), 200
-        else:
-            return jsonify({"error": "Usuario no encontrado"}), 404
+        request_data = request.get_json()  # Obtiene los datos enviados en la solicitud en formato JSON
+        user_id = request_data.get('user_id')  # Extrae el ID del usuario de los datos de la solicitud
+        username = request_data.get('username')  # Extrae el nombre de usuario de los datos de la solicitud
+        email = request_data.get('email')  # Extrae el correo electrónico de los datos de la solicitud
+        image_url = request_data.get('imageUrl')  # Extrae la URL de la imagen de perfil de los datos de la solicitud
+        background_url = request_data.get('backgroundUrl')  # Extrae la URL de la imagen de fondo de los datos de la solicitud
+
+        if not user_id or not username or not email:
+            return jsonify({"error": "User ID, username, and email are required."}), 400  # Verifica que user_id, username y email estén presentes, si no, devuelve un error 400
+
+        user = User.query.get(user_id)  # Busca al usuario en la base de datos por su ID
+        if not user:
+            return jsonify({"error": "User not found."}), 404  # Si no se encuentra el usuario, devuelve un error 404
+
+        # Actualiza los campos del usuario con los nuevos valores
+        user.username = username
+        user.email = email
+        user.image_url = image_url
+        user.background_url = background_url
+
+        db.session.commit()  # Guarda los cambios en la base de datos
+        return jsonify({"msg": "Profile updated successfully."}), 200  # Devuelve un mensaje de éxito con un código 200
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "Error processing request", "details": str(e)}), 500  # Si ocurre una excepción, devuelve un error 500 con detalles del error
+
+if __name__ == '__main__':
+    app.run(debug=True)  # Inicia el servidor en modo de depuración

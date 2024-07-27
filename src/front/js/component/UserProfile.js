@@ -8,21 +8,23 @@ import { GiMountains } from "react-icons/gi";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
-  const [showChangePassword, setShowChangePassword] = useState(false); // Definir estado
-  const [newPassword, setNewPassword] = useState(''); // Definir estado
-  const [confirmPassword, setConfirmPassword] = useState(''); // Definir estado
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const { actions, store } = useContext(Context);
   const { user } = store;
   const navigate = useNavigate();
   const didFetchData = useRef(false);
+
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('accessToken');
     if (!isLoggedIn) {
       navigate('/');
       return;
     }
-    // Asegurarse de que la solicitud solo se haga una vez
+
     if (!didFetchData.current && user) {
       didFetchData.current = true;
       actions.userData()
@@ -33,19 +35,24 @@ const UserProfile = () => {
         });
     }
   }, [user, navigate, actions]);
+
   const handleEditClick = () => {
     navigate('/editprofile');
   };
+
   const handleChangePasswordClick = () => {
     setShowChangePassword(!showChangePassword);
     setError('');
+    setSuccessMessage('');
   };
+
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     if (newPassword === confirmPassword) {
       try {
         await actions.changePassword(user.email, newPassword);
         console.log('Contraseña cambiada exitosamente');
+        setSuccessMessage('La contraseña ha sido cambiada con éxito.');
         setShowChangePassword(false);
       } catch (error) {
         console.error('Error al cambiar la contraseña:', error.message);
@@ -54,38 +61,48 @@ const UserProfile = () => {
     } else {
       setError('Las contraseñas no coinciden.');
     }
+    setNewPassword('');
+    setConfirmPassword('');
   };
+
   const handleCancelChangePassword = () => {
     setShowChangePassword(false);
     setError('');
   };
+
   const handleGoBack = () => {
     navigate('/home');
   };
+
+  const closeMessage = () => {
+    setError('');
+    setSuccessMessage('');
+  };
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-      <Container className="d-flex justify-content-between align-items-center">
-        <h3 className="text-start fw-bolder d-flex align-items-center">
-          <span className="me-2 h1">
-            <GiMountains />
-          </span>
-          SenderosApp
-        </h3>
-        <div className="collapse navbar-collapse d-flex justify-content-end">
-          <ul className="navbar-nav d-flex align-items-center">
-            <li className="nav-item">
-              <span className="navbar-text me-3">Hola, {userData?.username || 'Usuario'}</span>
-            </li>
-            <li className="nav-item">
-              <Button variant="danger" onClick={handleGoBack} className="ms-auto me-3">
-                Volver a Home
-              </Button>
-            </li>
-          </ul>
-        </div>
-      </Container>
-    </nav>
+        <Container className="d-flex justify-content-between align-items-center">
+          <h3 className="text-start fw-bolder d-flex align-items-center">
+            <span className="me-2 h1">
+              <GiMountains />
+            </span>
+            SenderosApp
+          </h3>
+          <div className="collapse navbar-collapse d-flex justify-content-end">
+            <ul className="navbar-nav d-flex align-items-center">
+              <li className="nav-item">
+                <span className="navbar-text me-3">Hola, {userData?.username || 'Usuario'}</span>
+              </li>
+              <li className="nav-item">
+                <Button variant="danger" onClick={handleGoBack} className="ms-auto me-3">
+                  Volver a Home
+                </Button>
+              </li>
+            </ul>
+          </div>
+        </Container>
+      </nav>
       <div className="container user-profile mt-5">
         <div className="profile-header position-relative">
           <img
@@ -117,7 +134,18 @@ const UserProfile = () => {
             Cambio de Clave
           </Button>
         </div>
-        {error && <div className="alert alert-danger mt-3">{error}</div>}
+        {error && (
+          <div className="alert alert-danger mt-3 d-flex justify-content-between align-items-center">
+            {error}
+            <Button variant="light" size="sm" onClick={closeMessage}>X</Button>
+          </div>
+        )}
+        {successMessage && (
+          <div className="alert alert-success mt-3 d-flex justify-content-between align-items-center">
+            {successMessage}
+            <Button variant="light" size="sm" onClick={closeMessage}>X</Button>
+          </div>
+        )}
         {showChangePassword && (
           <div className="change-password-form mt-4">
             <form onSubmit={handlePasswordChange}>
@@ -158,4 +186,7 @@ const UserProfile = () => {
     </div>
   );
 };
+
 export default UserProfile;
+
+

@@ -239,6 +239,38 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
+			// Actualizar perfil del usuario
+            updateProfile: async (updatedProfile) => {
+                const { user } = getStore();
+                if (!user || !user.id) {
+                    throw new Error("El ID del usuario no está disponible.");
+                }
+                const url = `${process.env.BACKEND_URL}/api/user/${user.id}`;
+                try {
+                    const resp = await fetch(url, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(updatedProfile),
+                    });
+                    if (!resp.ok) {
+                        const errorDetails = await resp.json();
+                        throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
+                    }
+                    const data = await resp.json();
+                    setStore({
+                        user: {
+                            ...user,
+                            ...data,
+                        },
+                    });
+                    return data;
+                } catch (error) {
+                    console.error("Error al actualizar el perfil del usuario.", error);
+                    throw error;
+                }
+            },		
 		}
 	};
 };

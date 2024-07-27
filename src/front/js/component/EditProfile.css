@@ -1,34 +1,134 @@
+/* Fondo de la página */
 .background-image {
-    background-image: url('https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    min-height: 100vh;
-    padding-top: 20px;
-    overflow-y: auto; /* Permite el desplazamiento vertical */
-  }
-  .navbar {
-    background-color: rgba(255, 255, 255, 0.9);
-  }
-  .card {
-    background-color: rgba(255, 255, 255, 0.8);
-    max-height: 90vh; /* Limita la altura máxima del card */
-    overflow-y: auto; /* Permite el desplazamiento vertical dentro del card */
-    padding: 20px; /* Agrega padding dentro de la tarjeta */
-  }
-  .card-body {
-    padding: 20px; /* Asegura que haya suficiente espacio dentro del card-body */
-  }
-  .card-body h2 {
-    margin-top: 0; /* Elimina el margen superior del título */
-  }
-  .form-group {
-    margin-bottom: 1.5rem; /* Añade separación entre los campos del formulario */
-  }
-  .card-body .d-flex {
-    margin-top: 1.5rem; /* Añade separación entre el formulario y los botones */
-  }
-  .card img {
-    max-width: 100%;
-    height: auto;
-  }
+  background-image: url('https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  min-height: 100vh;
+  padding-top: 20px;
+  overflow-y: auto; /* Permite el desplazamiento vertical */
+}
+
+/* Barra de navegación */
+.navbar {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Tarjeta principal */
+.card {
+  background-color: rgba(255, 255, 255, 0.8);
+  max-height: 90vh; /* Limita la altura máxima del card */
+  overflow-y: auto; /* Permite el desplazamiento vertical dentro del card */
+  padding: 20px; /* Agrega padding dentro de la tarjeta */
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+  padding: 20px; /* Asegura que haya suficiente espacio dentro del card-body */
+}
+
+.card-body h2 {
+  margin-top: 0; /* Elimina el margen superior del título */
+}
+
+.form-group {
+  margin-bottom: 1.5rem; /* Añade separación entre los campos del formulario */
+}
+
+.card-body .d-flex {
+  margin-top: 1.5rem; /* Añade separación entre el formulario y los botones */
+}
+
+.card img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Vista previa de imágenes */
+.image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Imagen de perfil */
+.profile-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%; /* Hace la imagen circular */
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Imagen de perfil cargada */
+.profile-image.loaded {
+  width: 200px;
+  height: 200px;
+}
+
+/* Vista previa de la imagen de fondo */
+.background-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* Ajusta la altura según tus necesidades */
+  background-color: #f8f9fa; /* Color de fondo cuando no hay imagen cargada */
+}
+
+/* Placeholders */
+.placeholder-image {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* Hace el placeholder circular */
+  background-color: #e0e0e0; /* Color de fondo gris claro */
+  border: 2px dashed #bdbdbd; /* Borde punteado gris oscuro */
+  color: #757575; /* Color del texto */
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Placeholder para la imagen de fondo */
+.placeholder-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e0e0e0; /* Color de fondo gris claro */
+  border: 2px dashed #bdbdbd; /* Borde punteado gris oscuro */
+  color: #757575; /* Color del texto */
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  width: 200px; /* Asegúrate de que el ancho sea igual a la altura */
+  height: 200px; /* Asegúrate de que la altura sea igual al ancho */
+  border-radius: 50%; /* Hace el placeholder circular */
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.placeholder-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%; /* Asegura que la imagen también sea circular */
+}
+
+/* Estilo para la imagen de fondo cuando está cargada */
+.background-preview {
+  height: 200px; /* Ajusta la altura según tus necesidades */
+  background-color: transparent; /* Fondo transparente para la imagen cargada */
+}
+
+/* Estilo para la imagen de perfil cuando está cargada */
+.profile-image.loaded {
+  width: 200px;
+  height: 200px;
+}
+
