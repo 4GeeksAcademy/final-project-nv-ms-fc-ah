@@ -195,9 +195,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error al crear grupo", error);
 					throw error;
 				}
-			}
+			},
 			
-			,
 			userData: async () => {
 				const { user } = getStore();
 				console.log("get store from userData",user)
