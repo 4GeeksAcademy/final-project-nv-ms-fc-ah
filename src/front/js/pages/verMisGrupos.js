@@ -17,7 +17,7 @@ export const VerMisGrupos = (img, group_name, admin_name) => {
         image = {img}
         title = {group_name}
         admin = {admin_name}
-        link = {}
+      /*   link = {} */
         />
         <Footer/>
         </>

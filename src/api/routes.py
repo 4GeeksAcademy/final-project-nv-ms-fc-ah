@@ -120,6 +120,12 @@ def create_group():
 
 
 
+@api.route('/groups', methods=['GET'])
+def get_groups():
+    groups = Group.query.all()
+    return jsonify([groups.serialize() for groups in groups]), 200
+
+
 @api.route('/paths', methods=['POST'])
 @jwt_required()
 def create_path():
@@ -229,7 +235,7 @@ def change_password():
 @jwt_required()
 def upload_image():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+        return jsonify({"error": "No file part"}), 400  
     file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
