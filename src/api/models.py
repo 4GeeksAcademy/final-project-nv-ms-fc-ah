@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     img = db.Column(db.String(120), nullable=True, default='https://avatar.iran.liara.run/public/49')
-    path_id = db.Column(db.Integer, db.ForeignKey('Path.id'), nullable=True)
+    # path_id = db.Column(db.Integer, db.ForeignKey('Path.id'), nullable=True)
 
     def __repr__(self):
         return '<User %r>' % self.email
