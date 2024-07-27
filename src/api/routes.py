@@ -204,6 +204,7 @@ def get_members():
 
     return jsonify([member.serialize() for member in group_members]), 200
 
+
 @api.route('/change_password', methods=['PUT'])
 def change_password():
     try:

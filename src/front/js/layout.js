@@ -8,6 +8,7 @@ import { Register } from "./pages/register";
 import { Home } from "./pages/home";
 import { Grupos } from "./pages/grupos";
 import { CrearGrupo } from "./pages/crearGrupo";
+import { DetalleGrupo } from "./pages/detallesGrupo";
 import { Protegido } from "./component/protegido";
 import injectContext from "./store/appContext";
 
@@ -40,6 +41,7 @@ const Layout = () => {
             <Route element={<Grupos />} path="/grupos" />
             <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
             <Route element={<VerMisGrupos />} path="/grupos/mis-grupos" />
+            <Route element={<DetalleGrupo />} path="/detalle-grupo/:id" />
             <Route element={<UserProfile />} path="/userprofile" />
             <Route element={<EditProfile />} path="/editprofile" />
             <Route

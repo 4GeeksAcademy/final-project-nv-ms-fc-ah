@@ -58,7 +58,7 @@ export const CrearGrupo = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
-        navigate("/grupos");
+        navigate("/grupos/mis-grupos");
     };
 
     return (
