@@ -7,7 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash # Asegúrate de importar esta función
-from cloudinary.uploader import upload  #cloudinary
+import cloudinary.uploader  #cloudinary
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -251,5 +251,33 @@ def update_profile():
     except Exception as e:
         return jsonify({"error": "Error processing request", "details": str(e)}), 500  # Si ocurre una excepción, devuelve un error 500 con detalles del error
 
-if __name__ == '__main__':
-    app.run(debug=True)  # Inicia el servidor en modo de depuración
+
+   #Ruta para subir imagenes
+@api.route('/upload_image', methods=['POST'])
+@jwt_required()
+def upload_image():
+
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part in the request"}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    try:
+        upload_result = cloudinary.uploader.upload(file)
+        image_url = upload_result.get('url')
+
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        user.img = image_url
+        db.session.commit()
+        return jsonify({"message": "Image uploaded successfully", "image_url": image_url}), 200
+
+    except Exception as e:
+        return jsonify({"error": "Error uploading image", "details": str(e)}), 500 

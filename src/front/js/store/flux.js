@@ -69,7 +69,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 					
 					sessionStorage.setItem("accessToken", data.token);
-					// Asume que el backend solo devuelve el user_id
+
+					// Guardar el user_id en localStorage
+                    localStorage.setItem("userId", data.user_id);
+
+                    // Guardar el user_id en el store
 					setStore({
 						user: {
 							id: data.user_id // Ajusta para la estructura actual del backend
@@ -186,6 +190,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			userData: async () => {
 				const { user } = getStore();
+				// Obtener el ID del usuario del store o del localStorage
+				const userId = user?.id || localStorage.getItem('userId');
+
 				if (!user || !user.id) {
 					throw new Error('El ID del usuario no está disponible.');
 				}
@@ -241,36 +248,96 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			// Actualizar perfil del usuario
             updateProfile: async (updatedProfile) => {
-                const { user } = getStore();
-                if (!user || !user.id) {
+                const userId = localStorage.getItem('userId');
+
+                if (!userId) {
                     throw new Error("El ID del usuario no está disponible.");
                 }
-                const url = `${process.env.BACKEND_URL}/api/user/${user.id}`;
+                const url = `${process.env.BACKEND_URL}/api/update_profile`;
+
+				const profileWithId = {
+                    user_id: parseInt(userId, 10),
+                    ...updatedProfile
+                };
+
                 try {
                     const resp = await fetch(url, {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(updatedProfile),
+                        body: JSON.stringify(profileWithId),
                     });
                     if (!resp.ok) {
                         const errorDetails = await resp.json();
                         throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
                     }
-                    const data = await resp.json();
+                     // Obtener los datos actualizados
+					 const updatedUser = await resp.json();
+					 // Actualizar el store con los datos actualizados
+					 const actions = getActions();
+					 await actions.userData(); // Llama a userData a través de getActions()
+
                     setStore({
                         user: {
-                            ...user,
-                            ...data,
+                            ...getStore().user,
+                            ...updatedUser,
                         },
                     });
-                    return data;
+                    return updatedUser;
                 } catch (error) {
                     console.error("Error al actualizar el perfil del usuario.", error);
                     throw error;
                 }
-            },		
+            },
+			userData: async ({ signal } = {}) => {
+                const userId = localStorage.getItem('userId');
+                if (!userId) {
+                    throw new Error("El ID del usuario no está disponible.");
+                }
+                const url = `${process.env.BACKEND_URL}/api/user/${userId}`;
+                try {
+                    const resp = await fetch(url, { signal });
+                    if (!resp.ok) {
+                        const errorDetails = await resp.json();
+                        throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
+                    }
+                    return await resp.json();
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    throw error;
+                }
+            },
+			//accion para subir imagenes
+            uploadImage: async (file) => {
+                try {
+                    const token = sessionStorage.getItem("accessToken");
+                    if (!token) {
+                        throw new Error("Falta el token de acceso.");
+                    }
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    //llamada a la api
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/upload_image", {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok) {
+                        throw new Error(data.msg || "Error al subir la imagen.");
+                    }
+                    // console.log en caso de exito
+                    console.log("Imagen subida con éxito", data);
+                    return data;
+                } catch (error) {
+                    //console.log en caso de error
+                    console.error("Error al subir la imagen:", error);
+                    throw error;
+                }
+            }		
 		}
 	};
 };
