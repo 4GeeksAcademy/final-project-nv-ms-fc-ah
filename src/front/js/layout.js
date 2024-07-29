@@ -11,6 +11,7 @@ import { CrearGrupo } from "./pages/crearGrupo";
 import { DetalleGrupo } from "./pages/detallesGrupo";
 import { Protegido } from "./component/protegido";
 import injectContext from "./store/appContext";
+import { Footer } from "./component/footer";
 
 import Senderos from "./component/senderos";
 import InfoRutas from "./component/infoRutas";
@@ -28,28 +29,28 @@ const Layout = () => {
     return <BackendURL />;
 
   return (
-    <div>
+    <div id="root">
       <BrowserRouter basename={basename}>
-        <Routes>
-          <Route element={<Landing />} path="/" />
-          <Route element={<Login />} path="/login" />
-          <Route element={<Register />} path="/register" />
-          <Route element={<Protegido />}>
-            <Route element={<Home />} path="/home" />
-            <Route element={<h1>Not found!</h1>} />
-            <Route element={<Senderos />} path="/senderos" />
-            <Route element={<Grupos />} path="/grupos" />
-            <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
-            <Route element={<VerMisGrupos />} path="/grupos/mis-grupos" />
-            <Route element={<DetalleGrupo />} path="/grupos/:id" />
-            <Route element={<UserProfile />} path="/userprofile" />
-            <Route element={<EditProfile />} path="/editprofile" />
-            <Route
-              element={<InfoRutas />}
-              path="/infoRuta/:nombre"
-            />
-          </Route>
-        </Routes>
+        <div className="main-content">
+          <Routes>
+            <Route element={<Landing />} path="/" />
+            <Route element={<Login />} path="/login" />
+            <Route element={<Register />} path="/register" />
+            <Route element={<Protegido />}>
+              <Route element={<Home />} path="/home" />
+              <Route element={<h1>Not found!</h1>} />
+              <Route element={<Senderos />} path="/senderos" />
+              <Route element={<Grupos />} path="/grupos" />
+              <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
+              <Route element={<VerMisGrupos />} path="/grupos/mis-grupos" />
+              <Route element={<DetalleGrupo />} path="/grupos/:id" />
+              <Route element={<UserProfile />} path="/userprofile" />
+              <Route element={<EditProfile />} path="/editprofile" />
+              <Route element={<InfoRutas />} path="/infoRuta/:nombre" />
+            </Route>
+          </Routes>
+        </div>
+        <Footer /> {/* Ensure Footer is rendered here */}
       </BrowserRouter>
     </div>
   );
