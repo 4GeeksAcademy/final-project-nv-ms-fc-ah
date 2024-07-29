@@ -120,6 +120,22 @@ def create_group():
 
 
 
+@api.route('/groups', methods=['GET'])
+def get_groups():
+    groups = Group.query.all()
+    return jsonify([groups.serialize() for groups in groups]), 200
+
+@api.route('/all-group-members', methods=['GET'])
+def get_groupMembers():
+    groupMembers = GroupMember.query.all()
+    return jsonify([groupMembers.serialize() for groupMembers in groupMembers]), 200
+
+@api.route('/groups/<int:group_id>', methods=['GET'])
+def get_singleGroupData(group_id):
+    singleGroupData = Group.query.get(group_id)
+    return jsonify([singleGroupData.serialize()]), 200
+
+
 @api.route('/paths', methods=['POST'])
 @jwt_required()
 def create_path():
@@ -166,7 +182,6 @@ def add_favorite_path():
 
 
 @api.route('/add_group_members', methods=['POST'])
-@jwt_required()
 def add_group_member():
     request_body = request.get_json()
     group_id = request_body.get("group_id", None)
@@ -229,7 +244,7 @@ def change_password():
 @jwt_required()
 def upload_image():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+        return jsonify({"error": "No file part"}), 400  
     file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
