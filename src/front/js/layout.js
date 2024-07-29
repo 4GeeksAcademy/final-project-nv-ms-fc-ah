@@ -41,7 +41,7 @@ const Layout = () => {
             <Route element={<Grupos />} path="/grupos" />
             <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
             <Route element={<VerMisGrupos />} path="/grupos/mis-grupos" />
-            <Route element={<DetalleGrupo />} path="/detalle-grupo/:id" />
+            <Route element={<DetalleGrupo />} path="/grupos/:id" />
             <Route element={<UserProfile />} path="/userprofile" />
             <Route element={<EditProfile />} path="/editprofile" />
             <Route
