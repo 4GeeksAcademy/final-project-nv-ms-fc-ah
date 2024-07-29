@@ -15,7 +15,7 @@ export const CrearGrupo = () => {
 
     const didFetchData = useRef(false);
     const { user } = store;
-    console.log("store",user)
+    //console.log("store",user)
     useEffect(() => {
         const isLoggedIn = sessionStorage.getItem('accessToken');
         if (!isLoggedIn) {
@@ -40,7 +40,7 @@ export const CrearGrupo = () => {
                     });
             }
         }
-    }, [user, navigate, actions]);
+    }, [navigate, actions]);
 
     const handleCreateGroup = async (e) => {
         e.preventDefault();

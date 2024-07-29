@@ -125,6 +125,16 @@ def get_groups():
     groups = Group.query.all()
     return jsonify([groups.serialize() for groups in groups]), 200
 
+@api.route('/all-group-members', methods=['GET'])
+def get_groupMembers():
+    groupMembers = GroupMember.query.all()
+    return jsonify([groupMembers.serialize() for groupMembers in groupMembers]), 200
+
+##@api.route('/group-members/<int:group_id>', methods=['GET'])
+##def get_singleGroupMembers(group_id):
+##    singleGroupMembers = GroupMember.query.get(group_id)
+##    return jsonify([singleGroupMembers.serialize() for singleGroupMembers in singleGroupMembers]), 200
+
 
 @api.route('/paths', methods=['POST'])
 @jwt_required()

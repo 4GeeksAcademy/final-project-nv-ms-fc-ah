@@ -151,8 +151,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({user: data});
 						console.log("Datos de usuario actualizados en el store.", data)
 					}
-					console.log("get store",user)
-					console.log("set store",data)
 
 				} catch (error) {
 					console.error("Error al obtener datos protegidos.", error);
@@ -261,6 +259,86 @@ const getState = ({ getStore, getActions, setStore }) => {
 					throw error;
 				}
 			},
+
+			getGroups: async () => {
+				try {
+					// Llamada a la API para cambiar la contraseña
+					const url = `${process.env.BACKEND_URL}/api/groups`;
+					const resp = await fetch(url, {
+						method: "GET",
+						headers: {
+							"Content-type": "application/json",
+						},
+					});
+
+					const data = await resp.json();
+
+					if (!resp.ok) {
+						throw new Error(data.msg || "Error al ver los grupos.");
+					}
+
+					// Opcional: Maneja la respuesta del backend si es necesario
+					console.log('Grupos presentados de manera exitosa', data);
+
+					// Retorna los datos (opcional)
+					return data;
+				} catch (error) {
+					console.error("Error al mostrar los grupos.", error);
+					throw error;
+				}
+			},
+
+			getGroupMembers: async () => {
+				try {
+					// Llamada a la API para cambiar la contraseña
+					const url = `${process.env.BACKEND_URL}/api/all-group-members`;
+					const resp = await fetch(url, {
+						method: "GET",
+						headers: {
+							"Content-type": "application/json",
+						},
+					});
+
+					const data = await resp.json();
+
+					if (!resp.ok) {
+						throw new Error(data.msg || "Error al ver los miembros de grupo.");
+					}
+
+					// Opcional: Maneja la respuesta del backend si es necesario
+					console.log('Miembros de grupo presentados de manera exitosa', data);
+
+					// Retorna los datos (opcional)
+					return data;
+				} catch (error) {
+					console.error("Error al mostrar los miembros de grupo.", error);
+					throw error;
+				}
+			},
+
+			userInfo: async (user_id) => {
+				try {
+				  const url = `${process.env.BACKEND_URL}/api/user/${user_id}`;
+				  const resp = await fetch(url, {
+					method: "GET",
+					headers: {
+					  "Content-type": "application/json",
+					}
+				  });
+			  
+				  const data = await resp.json();
+			  
+				  if (!resp.ok) {
+					throw new Error(data.msg || "Error al obtener datos del usuario.");
+				  }
+			  
+				  return data; // Ensure you return the fetched data
+			  
+				} catch (error) {
+				  console.error("Error al obtener datos del usuario.", error);
+				  throw error; // Rethrow to allow handling in calling code
+				}
+			  },
 		}
 	};
 };

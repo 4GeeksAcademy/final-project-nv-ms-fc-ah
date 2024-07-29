@@ -27,7 +27,6 @@ export const Register = () => {
   };
 
   const handleGoogleSuccess = (response) => {
-    console.log(response);
     setShowModal(true);
   };
 
