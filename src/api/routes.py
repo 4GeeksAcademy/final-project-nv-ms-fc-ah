@@ -130,10 +130,10 @@ def get_groupMembers():
     groupMembers = GroupMember.query.all()
     return jsonify([groupMembers.serialize() for groupMembers in groupMembers]), 200
 
-##@api.route('/group-members/<int:group_id>', methods=['GET'])
-##def get_singleGroupMembers(group_id):
-##    singleGroupMembers = GroupMember.query.get(group_id)
-##    return jsonify([singleGroupMembers.serialize() for singleGroupMembers in singleGroupMembers]), 200
+@api.route('/groups/<int:group_id>', methods=['GET'])
+def get_singleGroupData(group_id):
+    singleGroupData = Group.query.get(group_id)
+    return jsonify([singleGroupData.serialize()]), 200
 
 
 @api.route('/paths', methods=['POST'])
@@ -182,7 +182,6 @@ def add_favorite_path():
 
 
 @api.route('/add_group_members', methods=['POST'])
-@jwt_required()
 def add_group_member():
     request_body = request.get_json()
     group_id = request_body.get("group_id", None)

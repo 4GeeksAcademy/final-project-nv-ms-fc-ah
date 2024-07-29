@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "../component/navbar";
-import { Footer } from "../component/footer";
 import { CardGrupos } from "../component/Card/cardGrupos";
 import { CardMisGrupos } from "../component/Card/cardMisGrupos";
 import { CardCrearGrupo } from "../component/Card/cardCrearGrupo";
@@ -31,7 +30,6 @@ export const Grupos = () => {
                     />
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

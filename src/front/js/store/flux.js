@@ -316,6 +316,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			getSingleGroup: async (group_id) => {
+				try {
+					const url = `${process.env.BACKEND_URL}/api/groups/${group_id}`;
+					const resp = await fetch(url, {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+			
+					// Check if the response is OK
+					if (!resp.ok) {
+						const errorData = await resp.json();
+						throw new Error(errorData.msg || "Error al ver el grupo.");
+					}
+			
+					// Parse the JSON response
+					const [data] = await resp.json(); // Extract the first item from the list
+			
+					// Optional: Handle the response if necessary
+					console.log('Grupo presentado de manera exitosa', data);
+			
+					// Return the group data
+					return data;
+				} catch (error) {
+					console.error("Error al mostrar el grupo.", error);
+					throw error;
+				}
+			},
+			
+
 			userInfo: async (user_id) => {
 				try {
 				  const url = `${process.env.BACKEND_URL}/api/user/${user_id}`;

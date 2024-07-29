@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Navbar } from "../component/navbar";
-import { Footer } from "../component/footer";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import "../../styles/crearGrupo.css";
@@ -103,7 +102,6 @@ export const CrearGrupo = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };
