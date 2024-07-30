@@ -12,7 +12,7 @@ import Layout from "./layout";
 // Render your React application
 ReactDOM.render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+    <GoogleOAuthProvider clientId="653613152975-b4ccn14o78vpr1orsnspde7llqtc3pbg.apps.googleusercontent.com">
       <Layout />
     </GoogleOAuthProvider>
   </React.StrictMode>,
