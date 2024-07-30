@@ -9,6 +9,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from werkzeug.security import generate_password_hash, check_password_hash # Asegúrate de importar esta función
 from cloudinary.uploader import upload  #cloudinary
 from datetime import timedelta
+import cloudinary.uploader
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -125,6 +126,18 @@ def get_groups():
     groups = Group.query.all()
     return jsonify([groups.serialize() for groups in groups]), 200
 
+@api.route('/all-group-members', methods=['GET'])
+def get_groupMembers():
+    groupMembers = GroupMember.query.all()
+    return jsonify([groupMembers.serialize() for groupMembers in groupMembers]), 200
+
+@api.route('/groups/<int:group_id>', methods=['GET'])
+def get_singleGroupData(group_id):
+    singleGroupData = Group.query.get(group_id)
+    return jsonify([singleGroupData.serialize()]), 200
+
+
+
 
 @api.route('/paths', methods=['POST'])
 def create_path():
@@ -185,7 +198,6 @@ def add_favorite_path():
 
 
 @api.route('/add_group_members', methods=['POST'])
-@jwt_required()
 def add_group_member():
     request_body = request.get_json()
     group_id = request_body.get("group_id", None)
@@ -223,6 +235,68 @@ def get_members():
 
     return jsonify([member.serialize() for member in group_members]), 200
 
+@api.route('/groups/<int:group_id>/leave', methods=['POST'])
+@jwt_required()
+def leave_group(group_id):
+    user_id = get_jwt_identity()
+    membership = GroupMember.query.filter_by(group_id=group_id, user_id=user_id).first()
+    
+    if membership:
+        db.session.delete(membership)
+        db.session.commit()
+        return jsonify({"msg": "El usuario ha abandonado el grupo."}), 200
+    else:
+        return jsonify({"msg": "Error al abandonar el grupo porque el usuario no era miembro."}), 404
+    
+
+@api.route('/delete-group-members/<int:group_id>', methods=['DELETE'])
+def delete_group_members(group_id):
+    try:
+        # Fetch all members of the specified group
+        members = GroupMember.query.filter_by(group_id=group_id).all()
+        
+        # Check if the group exists
+        if not members:
+            return jsonify({"message": "No members found for the specified group"}), 404
+        
+        # Delete all members
+        for member in members:
+            db.session.delete(member)
+        
+        # Commit changes
+        db.session.commit()
+        
+        return jsonify({"message": "All members have been deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error: {e}")
+        return jsonify({"message": "An error occurred while deleting members"}), 500
+
+# In your Flask app
+@api.route('/groups/<int:group_id>', methods=['DELETE'])
+@jwt_required()
+def delete_group(group_id):
+    # Ensure the user is the admin of the group
+    user_id = get_jwt_identity()
+    group = Group.query.get(group_id)
+    if not group:
+        return jsonify({'msg': 'Group not found'}), 404
+    
+    # Delete the group
+    db.session.delete(group)
+    db.session.commit()
+    
+    return jsonify({'msg': 'Group deleted successfully'}), 200
+
+@api.route('/users', methods=['GET'])
+def get_all_users():
+    try:
+        users = User.query.all()  # Fetch all users
+        serialized_users = [user.serialize() for user in users]  # Serialize user data
+        return jsonify(serialized_users), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred while fetching users'}), 500
 
 @api.route('/change_password', methods=['PUT'])
 def change_password():
@@ -246,46 +320,58 @@ def change_password():
 
 #ruta para subir imagenes
 @api.route('/upload', methods=['PUT'])
+@api.route('/update_profile', methods=['PUT'])
+def update_profile():
+    try:
+        request_data = request.get_json()
+        user_id = request_data.get('user_id')
+        username = request_data.get('username')
+        email = request_data.get('email')
+        image_url = request_data.get('imageUrl')
+        background_url = request_data.get('backgroundUrl')
+        if not user_id or not username or not email:
+            return jsonify({"error": "User ID, username, and email are required."}), 400
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found."}), 404
+        user.username = username
+        user.email = email
+        user.image_url = image_url
+        user.background_url = background_url
+        db.session.commit()
+        return jsonify({"msg": "Profile updated successfully."}), 200
+    except Exception as e:
+        return jsonify({"error": "Error processing request", "details": str(e)}), 500
+    
+#Ruta para subir imagenes
+@api.route('/upload_image', methods=['POST'])
 @jwt_required()
 def upload_image():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400  
+        return jsonify({"error": "No file part in the request"}), 400
     file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
     try:
-        # Subir la imagen a Cloudinary
         upload_result = cloudinary.uploader.upload(file)
-        return jsonify({"url": upload_result['secure_url']}), 200
+        image_url = upload_result.get('url')
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        user.img = image_url
+        db.session.commit()
+        return jsonify({"message": "Image uploaded successfully", "image_url": image_url}), 200
     except Exception as e:
         return jsonify({"error": "Error uploading image", "details": str(e)}), 500
-@api.route('/image/<string:image_id>', methods=['GET'])
-def get_image(image_id):
-    # Construir la URL de la imagen usando el ID
-    cloud_name = 'dfle6uz4i'  # lo tome de la pagina
-    image_url = f'https://res.cloudinary.com/{dfle6uz4i}/image/upload/{image_id}'
-    image_url = f'https://res.cloudinary.com/dfle6uz4i/image/upload/{image_id}'
-    # Devolver la URL de la imagen en la respuesta
-    return jsonify({"url": image_url}), 200
-@api.route('/update_profile', methods=['POST'])
-def update_profile():
-    try:
-        request_data = request.get_json()
-        name = request_data['name']
-        surname = request_data['surname']
-        email = request_data['email']
-        imageUrl = request_data['imageUrl']
-        backgroundUrl = request_data['backgroundUrl']
-        # Aquí actualizas el perfil del usuario en la base de datos
-        user = User.query.filter_by(email=email).first()
-        if user:
-            user.name = name
-            user.surname = surname
-            user.image_url = imageUrl
-            user.background_url = backgroundUrl
-            db.session.commit()
-            return jsonify({"msg": "Perfil actualizado exitosamente"}), 200
-        else:
-            return jsonify({"error": "Usuario no encontrado"}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
+
+
+
+
+
