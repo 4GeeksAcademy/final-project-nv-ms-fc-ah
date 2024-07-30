@@ -346,6 +346,93 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			
+			leaveGroup: async (group_id) => {
+				try {
+					// Assuming you store the token in the localStorage or in your app's state
+					const token = sessionStorage.getItem("accessToken");
+			
+					if (!token) {
+						throw new Error("No token available.");
+					}
+			
+					const url = `${process.env.BACKEND_URL}/api/groups/${group_id}/leave`;
+					const resp = await fetch(url, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							"Authorization": `Bearer ${token}`, // Include the token in the Authorization header
+						},
+					});
+			
+					if (!resp.ok) {
+						const errorData = await resp.json();
+						throw new Error(errorData.msg || "Error al abandonar el grupo.");
+					}
+			
+					console.log("Has abandonado el grupo.");
+				} catch (error) {
+					console.error("Error al abandonar el grupo:", error);
+					throw error;
+				}
+			},
+			
+			deleteAllGroupMembers: async (groupId) => {
+				try {
+					const deleteMembersUrl = `${process.env.BACKEND_URL}/api/delete-group-members/${groupId}`;
+					const deleteMembersResp = await fetch(deleteMembersUrl, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+						},
+					});
+			
+					if (!deleteMembersResp.ok) {
+						throw new Error('Error deleting group members');
+					}
+			
+					console.log('All group members deleted successfully');
+				} catch (error) {
+					console.error('Error deleting group members:', error.message);
+					throw error; // Rethrow to allow handling in the calling code
+				}
+			},
+			
+			deleteGroup: async (groupId) => {
+				try {
+					const deleteGroupUrl = `${process.env.BACKEND_URL}/api/groups/${groupId}`;
+					const deleteGroupResp = await fetch(deleteGroupUrl, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+						},
+					});
+			
+					if (!deleteGroupResp.ok) {
+						throw new Error('Error deleting the group');
+					}
+			
+					console.log('Group deleted successfully');
+				} catch (error) {
+					console.error('Error deleting the group:', error.message);
+					throw error; // Rethrow to allow handling in the calling code
+				}
+			},
+
+			getAllUsers: async () => {
+				const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${sessionStorage.getItem('accessToken')}`,
+					},
+				});
+				if (!response.ok) {
+					throw new Error('Failed to fetch users');
+				}
+				return response.json();
+			},
 
 			userInfo: async (user_id) => {
 				try {

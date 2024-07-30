@@ -18,6 +18,7 @@ import InfoRutas from "./component/infoRutas";
 import UserProfile from "./component/UserProfile";
 import EditProfile from "./component/EditProfile";
 import { VerMisGrupos } from "./pages/verMisGrupos";
+import { Users } from "./pages/users";
 
 //create your first component
 const Layout = () => {
@@ -47,6 +48,7 @@ const Layout = () => {
               <Route element={<UserProfile />} path="/userprofile" />
               <Route element={<EditProfile />} path="/editprofile" />
               <Route element={<InfoRutas />} path="/infoRuta/:nombre" />
+              <Route element={<Users />} path="/users" />
             </Route>
           </Routes>
         </div>
