@@ -1,19 +1,18 @@
 import React from "react";
 
-export const CardUserInfo = ({ profile_picture, username, role, link_id }) => {
-  return (
-    <div className="card mb-3" style={{ maxWidth: '300px', margin: '10px' }}>
-      <div className="row g-0">
-        <div className="col-md-4">
-          <img src={profile_picture} className="img-fluid rounded-start" alt={username} style={{ maxHeight: '100px', objectFit: 'cover' }} />
+export const CardUserInfo = ({ profile_picture, username, link_id, isMember, onAddUser }) => {
+    return (
+        <div className="card m-2" style={{ width: "18rem" }}>
+            <img src={profile_picture} className="card-img-top" alt={username} />
+            <div className="card-body">
+                <h5 className="card-title">{username}</h5>
+                {/* Render the button only if the user is not a member */}
+                {!isMember && (
+                    <button className="btn btn-primary" onClick={() => onAddUser(link_id)}>
+                        Añadir usuario al grupo
+                    </button>
+                )}
+            </div>
         </div>
-        <div className="col-md-8">
-          <div className="card-body d-flex flex-column align-items-center text-center">
-            <h5 className="card-title mb-2" style={{ fontSize: '1rem' }}>{username}</h5>
-            <p className="card-text mb-2" style={{ fontSize: '0.875rem', color: 'gray' }}>{role}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };

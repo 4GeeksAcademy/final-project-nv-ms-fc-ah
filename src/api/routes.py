@@ -137,6 +137,8 @@ def get_singleGroupData(group_id):
     return jsonify([singleGroupData.serialize()]), 200
 
 
+
+
 @api.route('/paths', methods=['POST'])
 @jwt_required()
 def create_path():
@@ -220,6 +222,68 @@ def get_members():
 
     return jsonify([member.serialize() for member in group_members]), 200
 
+@api.route('/groups/<int:group_id>/leave', methods=['POST'])
+@jwt_required()
+def leave_group(group_id):
+    user_id = get_jwt_identity()
+    membership = GroupMember.query.filter_by(group_id=group_id, user_id=user_id).first()
+    
+    if membership:
+        db.session.delete(membership)
+        db.session.commit()
+        return jsonify({"msg": "El usuario ha abandonado el grupo."}), 200
+    else:
+        return jsonify({"msg": "Error al abandonar el grupo porque el usuario no era miembro."}), 404
+    
+
+@api.route('/delete-group-members/<int:group_id>', methods=['DELETE'])
+def delete_group_members(group_id):
+    try:
+        # Fetch all members of the specified group
+        members = GroupMember.query.filter_by(group_id=group_id).all()
+        
+        # Check if the group exists
+        if not members:
+            return jsonify({"message": "No members found for the specified group"}), 404
+        
+        # Delete all members
+        for member in members:
+            db.session.delete(member)
+        
+        # Commit changes
+        db.session.commit()
+        
+        return jsonify({"message": "All members have been deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error: {e}")
+        return jsonify({"message": "An error occurred while deleting members"}), 500
+
+# In your Flask app
+@api.route('/groups/<int:group_id>', methods=['DELETE'])
+@jwt_required()
+def delete_group(group_id):
+    # Ensure the user is the admin of the group
+    user_id = get_jwt_identity()
+    group = Group.query.get(group_id)
+    if not group:
+        return jsonify({'msg': 'Group not found'}), 404
+    
+    # Delete the group
+    db.session.delete(group)
+    db.session.commit()
+    
+    return jsonify({'msg': 'Group deleted successfully'}), 200
+
+@api.route('/users', methods=['GET'])
+def get_all_users():
+    try:
+        users = User.query.all()  # Fetch all users
+        serialized_users = [user.serialize() for user in users]  # Serialize user data
+        return jsonify(serialized_users), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred while fetching users'}), 500
 
 @api.route('/change_password', methods=['PUT'])
 def change_password():
