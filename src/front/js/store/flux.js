@@ -50,41 +50,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			userLogin: async (email, password) => {
-				try {
-					const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
-						method: "POST",
-						headers: {
-							"Content-type": "application/json"
-						},
-						body: JSON.stringify({ email, password })
-					});
-			
-					const data = await resp.json();
-			
-					if (!resp.ok) {
-						throw new Error(data.msg || "Error al iniciar sesión.");
-					}
-			
-					sessionStorage.setItem("accessToken", data.token);
-					
-					// Debugging
-					console.log("Login response data:", data);
-					
-					setStore({
-						user: {
-							id: data.user_id // Adjust to match your backend response
-						}
-					});
-			
-					// Debugging
-					console.log("User data set in store:", getStore().user);
-			
-					return data;
-				} catch (error) {
-					console.log("Error al iniciar sesión.", error);
-					throw error;
-				}
-			},
+                try {
+                    // Hacer la petición al backend
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok) {
+                        throw new Error(data.msg || "Error al iniciar sesión.");
+                    }
+                    // Guardar el token en sessionStorage
+                    sessionStorage.setItem("accessToken", data.token);
+                    // Guardar el user_id en localStorage
+                    localStorage.setItem("userId", data.user_id);
+                    // Guardar el user_id en el store
+                    setStore({
+                        user: {
+                            id: data.user_id
+                        }
+                    });
+                    // Retornar la data como resolución de la promesa
+                    return data;
+                } catch (error) {
+                    console.log("Error al iniciar sesión.", error);
+                    throw error;
+                }
+            },
 			
 
 
@@ -196,41 +191,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			
 			userData: async () => {
-				const { user } = getStore();
-				console.log("get store from userData",user)
-				if (!user || !user.id) {
-					throw new Error('El ID del usuario no está disponible.');
-				}
-				const url = `${process.env.BACKEND_URL}/api/user/${user.id}`;
-				try {
-					const resp = await fetch(url, {
-						headers: { "Content-type": "application/json" },
-					});
-					if (!resp.ok) {
-						const errorDetails = await resp.json();
-						throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
-					}
-					const data = await resp.json();
-			
-					// Debugging
-					console.log("Fetched user data:", data);
-			
-					setStore({
-						user: {
-							...user, // Maintain existing user info
-							...data // Update with new info
-						}
-					});
-			
-					// Debugging
-					console.log("Updated user in store:", getStore().user);
-			
-					return data;
-				} catch (error) {
-					console.error("Error al obtener datos del usuario.", error);
-					throw error;
-				}
-			},
+                const { user } = getStore();
+                // Obtener el ID del usuario del store o del localStorage
+                const userId = user?.id || localStorage.getItem('userId');
+                if (!userId) {
+                    throw new Error('El ID del usuario no está disponible.');
+                }
+                const url = `${process.env.BACKEND_URL}/api/user/${userId}`;
+                try {
+                    const resp = await fetch(url, {
+                        headers: { "Content-type": "application/json" },
+                    });
+                    if (!resp.ok) {
+                        const errorDetails = await resp.json();
+                        throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
+                    }
+                    const data = await resp.json();
+                    // Actualizar el estado con los datos del usuario
+                    setStore({
+                        user: {
+                            ...user, // Mantén la información del usuario existente
+                            ...data // Actualiza con la nueva información
+                        }
+                    });
+                    return data;
+                } catch (error) {
+                    console.error("Error al obtener datos del usuario.", error);
+                    throw error;
+                }
+            },
 			
 			changePassword: async (email, newPassword) => {
 				try {
@@ -370,8 +359,78 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  throw error; // Rethrow to allow handling in calling code
 				}
 			  },
-		}
-	};
+			  updateProfile: async (updatedProfile) => {
+                const userId = localStorage.getItem('userId');
+                if (!userId) {
+                    throw new Error("El ID del usuario no está disponible.");
+                }
+                const url = `${process.env.BACKEND_URL}/api/update_profile`;
+                // Asegúrate de que el campo `img` esté incluido si lo estás actualizando
+                const profileWithId = {
+                    user_id: parseInt(userId, 10),
+                    ...updatedProfile
+                };
+                console.log('Perfil a actualizar:', profileWithId);
+                try {
+                    const resp = await fetch(url, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(profileWithId),
+                    });
+                    if (!resp.ok) {
+                        const errorDetails = await resp.json();
+                        throw new Error(`Error ${resp.status}: ${errorDetails.message || resp.statusText}`);
+                    }
+                    // Obtener los datos actualizados
+                    const updatedUser = await resp.json();
+                    // Actualizar el store con los datos actualizados
+                    const actions = getActions();
+                    await actions.userData(); // Llama a userData a través de getActions()
+                    setStore({
+                        user: {
+                            ...getStore().user,
+                            ...updatedUser,
+                        },
+                    });
+                    return updatedUser;
+                } catch (error) {
+                    console.error("Error al actualizar el perfil del usuario.", error);
+                    throw error;
+                }
+            },  
+			//accion para subir imagenes
+            uploadImage: async (file) => {
+                try {
+                    const token = sessionStorage.getItem("accessToken");
+                    if (!token) {
+                        throw new Error("Falta el token de acceso.");
+                    }
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    //llamada a la api
+                    const resp = await fetch(process.env.BACKEND_URL + "/api/upload_image", {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+                    const data = await resp.json();
+                    if (!resp.ok) {
+                        throw new Error(data.msg || "Error al subir la imagen.");
+                    }
+                    // console.log en caso de exito
+                    console.log("Imagen subida con éxito", data);
+                    return data;
+                } catch (error) {
+                    //console.log en caso de error
+                    console.error("Error al subir la imagen:", error);
+                    throw error;
+                }
+            }
+        }
+    };
 };
-
 export default getState;
