@@ -1,7 +1,7 @@
 export const senderoToken = {
 	rutas: [
 		{
-			img: "https://images.unsplash.com/photo-1535479672101-8486af672be0?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Cerro San Cristóbal",
 			direccion: "Parque Metropolitano",
 			longitud: "9.0 km",
@@ -10,7 +10,7 @@ export const senderoToken = {
 			lng: -70.63128913243435,
 		},
 		{
-			img: "https://images.unsplash.com/photo-1528913010160-240d3500c209?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Torres del paine",
 			direccion: "Región de Magallanes",
 			longitud: "76.5 km",
@@ -28,7 +28,7 @@ export const senderoToken = {
 			lng: -70.51940046464088,
 		},
 		{
-			img: "https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcR-mYaiMc4HVR8epJIQUT_IYRSsAlCmLas7_nBWBdJMq-lDFaLiB1uwVmI3Sg932TDKfE8ifSBUnKxBTPBrJlwEKD70TE60Idncnrx9y-8",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Cerro El Carbón",
 			direccion: "Huechuraba, Region Metropolitana",
 			longitud: "6.0 km",
@@ -37,7 +37,7 @@ export const senderoToken = {
 			lng: -70.600451131553,
 		},
 		{
-			img: "https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcRR703uSnZdT8P7ulC8mAMlXuG1P3xzzQE1WX2YvZCs1CLv3oHDMMuROZQGfceYD4Gu-2nTke6CtRiCh0frVdu1bRU1GO-8Aa04N-8jpQ",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Quebra de macul",
 			direccion: "Peñalolen, Region Metropolitana",
 			longitud: "22.7 km",
@@ -46,7 +46,7 @@ export const senderoToken = {
 			lng: -70.4885,
 		},
 		{
-			img: "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTswADieKOZXwRQlGWy80_Zel7xtMJFYSjMovVl7S5kQfu7v0bWNKhUML9fnhQeEWQ21bX01xbdqdpj14BMqzDfiYMHkdwaIaqH0nTMOA",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Glaciar Colgante El Morado",
 			direccion: "San Jose de Maipo, Region Metropolitana",
 			longitud: "7.0 km",
@@ -55,7 +55,7 @@ export const senderoToken = {
 			lng: -70.06560802534072,
 		},
 		{
-			img: "https://lh5.googleusercontent.com/p/AF1QipOwsoy5ajG0UvWf_oOweeIqlfmRCaj15XCIamFq=w675-h390-n-k-no",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Cerro La Camapana",
 			direccion: "Hijuelas, Region de Valparaiso",
 			longitud: "11.3 km",
@@ -64,7 +64,7 @@ export const senderoToken = {
 			lng: -71.11893996150009,
 		},
 		{
-			img: "https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcQI7AXPEurZzKVfLAVxH_KWCUbe6KmTs7MKhunqo4TjFUCIHZUEID1R0ls7d29a7n8-09JngBjYK_EOUq62tcvK-hu-HEbUrY5yhO9oAw",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Salto del Rio Petrohue",
 			direccion: "Puerto Varas, Region de los Lagos",
 			longitud: "1.6 km",
@@ -73,12 +73,12 @@ export const senderoToken = {
 			lng: -72.44954058529058,
 		},
 		{
-			img: "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcT7xvErTCLGnNw_IflgPzXv7gr5fdazr28Gv7h2vWd1ko342NT_Fhm_3kHtZHCIdUyX3bHJ5Qde3iH57oBT5XeRojKyCxwNHjL_7GCHPw",
+			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Volcan Cabulco",
 			direccion: "Puerto Montt, Region de los Lagos",
 			longitud: "17.5 km",
 			dificultad: "Dificil",
-			lat: -41.32471705615596, 
+			lat: -41.32471705615596,
 			lng: -72.60791934394493,
 		},
 		{
@@ -142,6 +142,20 @@ export const senderoToken = {
 		idMap: "786130161ea7eb76",
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

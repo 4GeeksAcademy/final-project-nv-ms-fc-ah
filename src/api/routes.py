@@ -39,6 +39,7 @@ def handle_register():
     db.session.commit()
     return jsonify(new_user.serialize()), 201
 
+
 @api.route('/login', methods=['POST'])
 def handle_login():
     request_body = request.get_json()
@@ -59,7 +60,6 @@ def handle_login():
     return jsonify({"token": access_token, "user_id": user.id}), 200
 
 
-#   
 @api.route('/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     
@@ -140,26 +140,39 @@ def get_singleGroupData(group_id):
 
 
 @api.route('/paths', methods=['POST'])
-@jwt_required()
 def create_path():
     request_body = request.get_json()
-    title_name = request_body.get("Title_name", None)
-    description = request_body.get("Description", None)
-    direction = request_body.get("Direction", None)
+    title_name = request_body.get("title_name", None)
+    difficulty = request_body.get("difficulty", None)
+    direction = request_body.get("direction", None)
+    img = request_body.get("img", None)
+    lat = request_body.get("lat", None)
+    lng = request_body.get("lng", None)
 
-    if not title_name or not description or not direction:
-        return jsonify({"error": "Title name, description and direction are required"}), 401
+    if request.content_type != 'application/json':
+        return "Unsupported Media Type", 415
+
+    if not title_name or not difficulty or not direction:
+        return jsonify({"error": "Title name, difficulty and direction are required"}), 401
 
     new_path = Path(
-        Title_name=title_name,
-        Description=description,
-        Direction=direction
+        title_name=title_name,
+        difficulty=difficulty,
+        direction=direction,
+        img=img,
+        lat=lat,
+        lng=lng
     )
 
     db.session.add(new_path)
     db.session.commit()
 
     return jsonify(new_path.serialize()), 201
+
+@api.route('/paths', methods=['GET'])
+def get_paths():
+    paths = Path.query.all()
+    return jsonify([paths.serialize() for paths in paths]), 200
 
 
 @api.route('/favorite_paths', methods=['POST'])
@@ -305,6 +318,8 @@ def change_password():
         # Manejar cualquier excepción inesperada
         return jsonify({"error": "Error al procesar la solicitud", "details": str(e)}), 500
 
+#ruta para subir imagenes
+@api.route('/upload', methods=['PUT'])
 @api.route('/update_profile', methods=['PUT'])
 def update_profile():
     try:

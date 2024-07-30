@@ -28,7 +28,7 @@ export const Navbar = () => {
           SenderosApp
         </h3>
         <ul className="navbar-nav d-flex flex-row mb-0">
-        <li className="nav-item me-3">
+          <li className="nav-item me-3">
             <Link to={"/home"} className="nav-link" href="#">
               Inicio
             </Link>
@@ -39,12 +39,17 @@ export const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item me-3">
+            <Link to={"/mis-rutas"} className="nav-link" href="#">
+              Favoritos
+            </Link>
+          </li>
+          <li className="nav-item me-3">
             <Link to={"/grupos"} className="nav-link" href="#">
               Grupos
             </Link>
           </li>
           <li className="nav-item me-3">
-          <Link to= "/userprofile" className="nav-link" >
+            <Link to="/userprofile" className="nav-link" >
               Perfil
             </Link>
           </li>
