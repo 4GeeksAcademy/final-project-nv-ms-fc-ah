@@ -32,6 +32,12 @@ img {
   font-size: 1rem;
 }
 
+.card_seccion_btn {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
 .container_card:hover {
   z-index: 5;
   cursor: progress;
@@ -91,8 +97,6 @@ img {
   box-shadow: 0px 0px 14px 0px rgba(147, 146, 147, 0.92);
 }
 /*media queries c */
-
-
 
 /*media queries infoRutas*/
 @media (min-width: 400px) and (max-width: 1134px) {

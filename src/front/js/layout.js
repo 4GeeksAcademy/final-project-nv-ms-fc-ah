@@ -11,12 +11,12 @@ import { CrearGrupo } from "./pages/crearGrupo";
 import { DetalleGrupo } from "./pages/detallesGrupo";
 import { Protegido } from "./component/protegido";
 import injectContext from "./store/appContext";
-
 import Senderos from "./component/senderos";
 import InfoRutas from "./component/infoRutas";
 import UserProfile from "./component/UserProfile";
 import EditProfile from "./component/EditProfile";
 import { VerMisGrupos } from "./pages/verMisGrupos";
+import MisRutas from "./component/misRutas";
 
 //create your first component
 const Layout = () => {
@@ -44,10 +44,12 @@ const Layout = () => {
             <Route element={<DetalleGrupo />} path="/detalle-grupo/:id" />
             <Route element={<UserProfile />} path="/userprofile" />
             <Route element={<EditProfile />} path="/editprofile" />
+            <Route element={<MisRutas />}  path="/mis-rutas"/>
             <Route
               element={<InfoRutas />}
               path="/infoRuta/:nombre"
             />
+
           </Route>
         </Routes>
       </BrowserRouter>

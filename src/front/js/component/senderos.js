@@ -6,15 +6,39 @@ import { senderoToken } from "./scrollToTop";
 
 function Senderos() {
   const navigate = useNavigate();
+
+  const postRoute = async (difficulty, direction, img, lat, lng, name) => {
+    const url = process.env.BACKEND_URL + "/api/paths";
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        modo: 'no-cors',
+        body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
+      })
+
+      if (!response.ok) {
+        throw new Error(`status: ${response.status}, text: ${response.statusText}`)
+      }
+      const data = response.json()
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.log(`El error es: ${error}`)
+    }
+  }
+
+
+
   return (
     <>
       <Navbar />
       <div className="container-fluid mt-5">
         <div className="container">
           <h2>
-            Rutas locales favoritas
-            <span className="border-bottom fw-bolder border-3 ms-1">
-              Santiago de Chile
+            Rutas Disponibles en
+            <span className="fw-bolder ms-2">
+              Chile
             </span>
             <div
               data-bs-spy="scroll"
@@ -23,13 +47,14 @@ function Senderos() {
               {senderoToken.rutas
                 ? senderoToken.rutas.map((el, idx) => (
                   <Card
-                    onClick={() => navigate(`/infoRuta/${el.nombre}`)}
                     key={idx}
                     img={el.img}
                     nombre={el.nombre}
                     ubicacion={el.direccion}
                     longitud={el.longitud}
                     exigencia={el.dificultad}
+                    onClick={() => navigate(`/infoRuta/${el.nombre}`)}
+                    addRoute={() => postRoute(el.dificultad, el.direccion, el.img, el.lat, el.lng, el.nombre)}
                   />
                 ))
                 : "Cargando Rutas"}

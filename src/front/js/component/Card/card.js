@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { GiPathDistance } from "react-icons/gi";
 import { GiMountainClimbing } from "react-icons/gi";
+import { ImCheckmark } from "react-icons/im";
 import style from "../Card/style.module.css";
 
-const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick }) => {
+const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick, addRoute }) => {
+  const [activeBtn, setActiveBtn] = useState(false)
+
   return (
-    <div onClick={onClick} className={style.container_card}>
+    <div className={style.container_card}>
       <div className={style.card_img}>
         <img src={img} alt="" />
       </div>
@@ -27,6 +30,12 @@ const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick }) => {
             </span>
             {exigencia}
           </p>
+        </div>
+        <div className={style.card_seccion_btn}>
+          <p onClick={addRoute} className={`btn btn-info  border-dark fw-bold fs-6`}  >
+            Añadir ruta
+          </p>
+          <p onClick={onClick} className="btn btn-warning fw-bolder border-dark fs-6 ">Ver mas</p>
         </div>
       </div>
     </div>
