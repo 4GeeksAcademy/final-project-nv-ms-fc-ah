@@ -29,8 +29,6 @@ function Senderos() {
 
   }
 
-
-
   return (
     <>
       <Navbar />
