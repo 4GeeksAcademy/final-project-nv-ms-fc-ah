@@ -3,14 +3,14 @@ import { Navbar } from "../component/navbar";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import { CardUnGrupo } from "../component/Card/cardUnGrupo";
-import "../../styles/verMisGrupos.css";
+import "../../styles/verMisGrupos.css"; // Import the CSS file
 
-export const VerMisGrupos = () => {
+export const UnirmeAGrupo = () => {
   const { actions, store } = useContext(Context);
   const [error, setError] = useState(null);
-  const [grupos, setGrupos] = useState([]);
+  const [nonMemberGroups, setNonMemberGroups] = useState([]);
   const [groupAdmins, setGroupAdmins] = useState({});
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const { user } = store;
@@ -32,31 +32,33 @@ export const VerMisGrupos = () => {
     if (user) {
       Promise.all([actions.getGroups(), actions.getGroupMembers()])
         .then(async ([groups, members]) => {
-          // Filter groups based on user membership
+          // Filter groups where the user is not a member
           const userGroups = groups.filter(group =>
-            members.some(member => member.group_id === group.id && member.user_id === user.id)
+            !members.some(member => member.group_id === group.id && member.user_id === user.id)
           );
-          setGrupos(userGroups);
+          setNonMemberGroups(userGroups);
 
-          console.log("Filtered Groups:", userGroups);
+          console.log("Filtered Non-Member Groups:", userGroups);
 
           // Collect admin information
-          const admins = members.filter(member => member.role === "admin" && userGroups.some(group => group.id === member.group_id));
-          console.log("Admins:", admins);
-          const adminPromises = admins.map(async admin => {
-            const userInfo = await actions.userInfo(admin.user_id);
-            return { ...admin, userInfo };
+          const adminPromises = userGroups.map(async group => {
+            const adminMember = members.find(member => member.group_id === group.id && member.role === "admin");
+            if (adminMember) {
+              const userInfo = await actions.userInfo(adminMember.user_id);
+              return { group_id: group.id, username: userInfo.username };
+            }
+            return null; // No admin found for this group (shouldn't happen)
           });
+
           const adminInfos = await Promise.all(adminPromises);
           console.log("Admin Infos:", adminInfos);
 
           // Create a mapping from group ID to admins
           const adminsByGroup = {};
-          adminInfos.forEach(({ group_id, userInfo }) => {
-            if (!adminsByGroup[group_id]) {
-              adminsByGroup[group_id] = [];
+          adminInfos.forEach(admin => {
+            if (admin) {
+              adminsByGroup[admin.group_id] = admin.username;
             }
-            adminsByGroup[group_id].push(userInfo.username);
           });
 
           setGroupAdmins(adminsByGroup);
@@ -66,7 +68,7 @@ export const VerMisGrupos = () => {
           setError('No se pudo obtener la información.');
         })
         .finally(() => {
-          setLoading(false); // Set loading to false when data fetching is complete
+          setLoading(false);
         });
     }
   }, [actions, user]);
@@ -79,9 +81,9 @@ export const VerMisGrupos = () => {
           <p>{error}</p>
         ) : loading ? (
           <p>Cargando grupos...</p>
-        ) : grupos.length > 0 ? (
+        ) : nonMemberGroups.length > 0 ? (
           <div className="row justify-content-center">
-            {grupos.map(grupo => (
+            {nonMemberGroups.map(grupo => (
               <div key={grupo.id} className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4">
                 <CardUnGrupo
                   group_name={grupo.name}
@@ -92,7 +94,7 @@ export const VerMisGrupos = () => {
             ))}
           </div>
         ) : (
-          <p>No eres miembro de ningún grupo.</p>
+          <p>No hay grupos disponibles para unirse.</p>
         )}
       </div>
     </>
