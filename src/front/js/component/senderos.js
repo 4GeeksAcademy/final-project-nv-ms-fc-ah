@@ -50,13 +50,13 @@ function Senderos() {
                 ? senderoToken.rutas.map((el, idx) => (
                   <Card
                     key={idx}
-                    img={el.img}
+                    img={el.img.toString()}
                     nombre={el.nombre}
                     ubicacion={el.direccion}
                     longitud={el.longitud}
                     exigencia={el.dificultad}
                     onClick={() => navigate(`/infoRuta/${el.nombre}`)}
-                    addRoute={() => postRoute(el.dificultad, el.direccion, el.longitud, el.img, el.lat, el.lng, el.nombre)}
+                    addRoute={() => postRoute(el.dificultad, el.direccion, el.img, el.lat, el.lng, el.nombre)}
                   />
                 ))
                 : "Cargando Rutas"}
