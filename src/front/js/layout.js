@@ -19,6 +19,7 @@ import InfoRutas from "./component/infoRutas";
 import UserProfile from "./component/UserProfile";
 import EditProfile from "./component/EditProfile";
 import { VerMisGrupos } from "./pages/verMisGrupos";
+import { UnirmeAGrupo } from "./pages/unirmeGrupo";
 import MisRutas from "./component/misRutas";
 import { Users } from "./pages/users";
 
@@ -47,6 +48,7 @@ const Layout = () => {
               <Route element={<Grupos />} path="/grupos" />
               <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
               <Route element={<VerMisGrupos />} path="/grupos/mis-grupos" />
+              <Route element={<UnirmeAGrupo />} path="/grupos/unirme" />
               <Route element={<DetalleGrupo />} path="/grupos/:id" />
               <Route element={<UserProfile />} path="/userprofile" />
               <Route element={<EditProfile />} path="/editprofile" />

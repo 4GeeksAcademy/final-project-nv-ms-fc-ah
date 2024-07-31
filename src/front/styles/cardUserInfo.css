@@ -1,0 +1,29 @@
+.card-user-info {
+    width: 200px; /* Adjust the width as needed */
+    height: auto; /* Keep the height auto to maintain aspect ratio */
+    margin: 10px; /* Space between cards */
+    text-align: center; /* Center text */
+    display: flex; /* Enable flexbox */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+}
+
+.card-user-info img {
+    width: 100px; /* Adjust image size */
+    height: 100px; /* Adjust image size */
+    object-fit: cover; /* Ensure the image covers the area */
+    border-radius: 50%; /* Make the image round */
+    margin-bottom: 10px; /* Space between image and text */
+}
+
+.card-user-info .card-body {
+    display: flex; /* Enable flexbox for card-body */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+}
+
+.card-user-info p {
+    font-size: xx-small; /* Adjust font size */
+    margin-top: 5px; /* Space between role and other elements */
+}
