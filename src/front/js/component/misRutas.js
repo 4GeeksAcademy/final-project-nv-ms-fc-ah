@@ -48,11 +48,11 @@ function MisRutas() {
                         {rutas && rutas.map((ruta) => <li key={ruta.id}><a href='#'>{ruta.title_name}</a></li>)}
                     </ul>
                 </div>
-             {/*    <div className='d-flex flex-wrap justify-content-between mt-4'>
+                <div className='d-flex flex-wrap justify-content-between mt-4'>
                     {rutas && rutas.map((ruta) => {
-                        return <Card nombre={ruta.title_name} exigencia={ruta.difficulty} ubicacion={ruta.direction} img={ruta.img} longitud={ruta} />
+                        return <Card nombre={ruta.title_name} exigencia={ruta.difficulty} ubicacion={ruta.direction} img={ruta.img}  />
                     })}
-                </div> */}
+                </div>
 
             </div>
             {/*   <Footer /> */}

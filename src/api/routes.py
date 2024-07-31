@@ -149,8 +149,8 @@ def create_path():
     lat = request_body.get("lat", None)
     lng = request_body.get("lng", None)
 
-    if request.content_type != 'application/json':
-        return "Unsupported Media Type", 415
+    """ if request.content_type != 'application/json':
+        return "Unsupported Media Type", 415 """
 
     if not title_name or not difficulty or not direction:
         return jsonify({"error": "Title name, difficulty and direction are required"}), 401
@@ -168,6 +168,7 @@ def create_path():
     db.session.commit()
 
     return jsonify(new_path.serialize()), 201
+
 
 @api.route('/paths', methods=['GET'])
 def get_paths():

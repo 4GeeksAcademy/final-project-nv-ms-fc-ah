@@ -15,7 +15,7 @@ function Senderos() {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        modo: 'no-cors',
+        mode: 'no-cors',
         body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
       })
       if (!response.ok) {
