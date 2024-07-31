@@ -48,7 +48,7 @@ export const senderoToken = {
 		{
 			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Glaciar Colgante El Morado",
-			direccion: "San Jose de Maipo, Region Metropolitana",
+			direccion: "Region Metropolitana",
 			longitud: "7.0 km",
 			dificultad: "Moderada",
 			lat: -33.73829913837327,
@@ -87,7 +87,7 @@ export const senderoToken = {
 			direccion: "Pucon, Region de la Araucania",
 			longitud: "12.9 km",
 			dificultad: "Intermedia",
-			lat: -39.138611, 
+			lat: -39.138611,
 			lng: -71.666389,
 		},
 		{
@@ -96,7 +96,7 @@ export const senderoToken = {
 			direccion: "Hueitra, Region de Aysén",
 			longitud: "14.6 km",
 			dificultad: "Dificil",
-			lat: -46.11257555395794,  
+			lat: -46.11257555395794,
 			lng: -72.19996993889335,
 		},
 		{
@@ -105,7 +105,7 @@ export const senderoToken = {
 			direccion: "Cisnes, Region de Aysén",
 			longitud: "5.6 km",
 			dificultad: "Moderada",
-			lat: -44.45212784990144,  
+			lat: -44.45212784990144,
 			lng: -72.52768516931322,
 		},
 		{
@@ -123,7 +123,7 @@ export const senderoToken = {
 			direccion: "San Pedro, Region de Atacama",
 			longitud: " 44.0 km",
 			dificultad: "Moderada",
-			lat: -22.917873777416172,  
+			lat: -22.917873777416172,
 			lng: -68.28742620745031,
 		},
 		{
@@ -132,7 +132,7 @@ export const senderoToken = {
 			direccion: "Cochamo, Region de los Ríos",
 			longitud: "11.0 km",
 			dificultad: "Moderada",
-			lat: -41.419079690972794,  
+			lat: -41.419079690972794,
 			lng: -72.13380080132166,
 		},
 	],

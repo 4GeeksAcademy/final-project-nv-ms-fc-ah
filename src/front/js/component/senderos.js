@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../component/Card/card";
 import { Navbar } from "./navbar";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { senderoToken } from "./scrollToTop";
 
 function Senderos() {
   const navigate = useNavigate();
+  const [icon, setIcon] = useState(false)
 
   const postRoute = async (difficulty, direction, img, lat, lng, name) => {
     const url = process.env.BACKEND_URL + "/api/paths";
@@ -16,7 +17,6 @@ function Senderos() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
       })
-
       if (!response.ok) {
         throw new Error(`status: ${response.status}, text: ${response.statusText}`)
       }
@@ -26,6 +26,7 @@ function Senderos() {
     } catch (error) {
       console.log(`El error es: ${error}`)
     }
+
   }
 
 

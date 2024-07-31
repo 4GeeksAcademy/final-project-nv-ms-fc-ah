@@ -149,8 +149,8 @@ def create_path():
     lat = request_body.get("lat", None)
     lng = request_body.get("lng", None)
 
-    if request.content_type != 'application/json':
-        return "Unsupported Media Type", 415
+    """ if request.content_type != 'application/json':
+        return "Unsupported Media Type", 415 """
 
     if not title_name or not difficulty or not direction:
         return jsonify({"error": "Title name, difficulty and direction are required"}), 401
@@ -168,6 +168,7 @@ def create_path():
     db.session.commit()
 
     return jsonify(new_path.serialize()), 201
+
 
 @api.route('/paths', methods=['GET'])
 def get_paths():
@@ -196,6 +197,18 @@ def add_favorite_path():
     return jsonify(new_favorite_path.serialize()), 201
 
 
+@api.route('/paths/<int:path_id>', methods=['DELETE'])
+def delete_path(path_id):
+    
+    path = Path.query.get(path_id) 
+    if not path:
+       return jsonify({"Mensaje": "ruta no encontrado."}), 404
+
+    db.session.delete(path)
+    db.session.commit()
+
+    return jsonify({'msg': 'path deleted successfully'}), 200
+
 
 @api.route('/add_group_members', methods=['POST'])
 def add_group_member():
@@ -217,6 +230,21 @@ def add_group_member():
     db.session.commit()
 
     return jsonify(new_group_member.serialize()), 201
+
+@api.route('/groups/<int:group_id>/members/<int:user_id>', methods=['DELETE'])
+def delete_group_member(group_id, user_id):
+    # Fetch the group membership record for the specified user and group
+    member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
+    if not member:
+        return jsonify({"Message": "The user is not a member of this group."}), 404
+
+    # Delete the member from the group
+    db.session.delete(member)
+    db.session.commit()
+    
+    return jsonify({"Message": "User deleted from group."}), 200
+
+
 
 @api.route('/group/members', methods=['GET'])
 def get_members():

@@ -45,6 +45,61 @@ img {
   box-shadow: 10px 10px 10px 0px rgba(8, 8, 8, 0.56);
 }
 
+/*styles card favorites*/
+.container_card_favorites {
+  transition: 1s;
+  width: 390px;
+  height: auto;
+  margin-top: 2rem;
+  padding: 1px;
+  box-sizing: border-box;
+  transition: 0.6s;
+  border-radius: 5%;
+  background-color: #f9fbfd;
+}
+
+.card_img_favorites {
+  width: 100%;
+  height: 250px;
+  border-radius: 5%;
+}
+
+.card_img_favorites img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card_text_title_favorites {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.card_text_footer_favorites {
+  margin-top: 1rem;
+  display: flex;
+  padding: 1.5rem 0.5rem;
+  justify-content: space-between;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.card_seccion_btn_favorites {
+  display: flex;
+  justify-content: space-between;
+  padding: 0rem 1rem;
+  align-content: center;
+}
+
+.container_card_favorites:hover {
+  z-index: 5;
+  cursor: progress;
+  border-radius: 5%;
+  box-shadow: 10px 10px 10px 0px rgba(8, 8, 8, 0.56);
+}
+
 /*styles infoRutas*/
 .content_infoRuta {
   transition: 0.5s;
