@@ -9,13 +9,14 @@ function Senderos() {
   const navigate = useNavigate();
   const [icon, setIcon] = useState(false)
 
-  const postRoute = async (difficulty, direction, distance, img, lat, lng, name) => {
+  const postRoute = async (difficulty, direction, img, lat, lng, name) => {
     const url = process.env.BACKEND_URL + "/api/paths";
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ difficulty: difficulty, direction: direction, distance: distance, img: img, lat: lat, lng: lng, title_name: name })
+        body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
+
       })
       if (!response.ok) {
         throw new Error(`status: ${response.status}, text: ${response.statusText}`)
