@@ -137,6 +137,16 @@ export const DetalleGrupo = () => {
         }
     };
 
+    const handleJoinGroup = async () => {
+        try {
+            await actions.addGroupMember(id, user.id, "member");
+            console.log(`User ${user.id} joined the group successfully.`);
+            await fetchData(); // Refresh members after joining
+        } catch (error) {
+            console.error("Error joining the group:", error);
+        }
+    };
+
     const isAdmin = admin && user && admin.id === user.id;
     const isMember = members.some(member => member.userInfo && user && member.userInfo.id === user.id);
 
@@ -177,17 +187,17 @@ export const DetalleGrupo = () => {
                             )}
                             {members.length > 0 ? (
                                 members.filter(member => member.userInfo.id !== admin.id).map(member => (
-                                <CardUserInfo
-                                    key={member.userInfo.id}
-                                    profile_picture={member.userInfo.img}
-                                    username={member.userInfo.username}
-                                    role={member.role}
-                                    link_id={member.userInfo.id}
-                                    handleAddUser={handleAddUser}
-                                    showAddButton={false} // or true if needed
-                                    handleRemoveUser={handleRemoveUser}
-                                    showRemoveButton={isAdmin} // Only show the button for admin
-                                />
+                                    <CardUserInfo
+                                        key={member.userInfo.id}
+                                        profile_picture={member.userInfo.img}
+                                        username={member.userInfo.username}
+                                        role={member.role}
+                                        link_id={member.userInfo.id}
+                                        handleAddUser={handleAddUser}
+                                        showAddButton={false} // or true if needed
+                                        handleRemoveUser={handleRemoveUser}
+                                        showRemoveButton={isAdmin} // Only show the button for admin
+                                    />
                                 ))
                             ) : (
                                 <p>No hay miembros en este grupo.</p>
@@ -208,7 +218,7 @@ export const DetalleGrupo = () => {
                                 Salir del grupo
                             </Button>
                         ) : (
-                            <Button variant="primary" className="m-3">
+                            <Button variant="primary" className="m-3" onClick={handleJoinGroup}>
                                 Unirme a este grupo
                             </Button>
                         )}

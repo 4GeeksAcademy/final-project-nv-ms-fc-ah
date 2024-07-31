@@ -41,6 +41,7 @@ function Senderos() {
             <span className="fw-bolder ms-2">
               Chile
             Rutas locales favoritas
+            </span>
             <span className="border-bottom fw-bolder border-3 ms-1 ">
               Santiago de Chile
             </span>
