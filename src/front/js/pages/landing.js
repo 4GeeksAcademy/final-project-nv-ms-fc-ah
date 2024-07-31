@@ -42,7 +42,6 @@ export const Landing = () => {
         <div className="background-container">
         </div>
       </div>
-      <Footer />
     </>
   );
 };

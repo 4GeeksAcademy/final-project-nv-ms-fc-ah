@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar } from './navbar';
-import { Footer } from './footer';
 import { GiPathDistance } from 'react-icons/gi';
-import Card from './Card/card';
+import CardFavorites from './Card/cardFavorites';
+import { useNavigate } from 'react-router-dom';
 
 function MisRutas() {
+    const navigate = useNavigate();
 
     const [rutas, setRutas] = useState([])
 
@@ -23,15 +24,34 @@ function MisRutas() {
                 console.log(`Error: ${error}`)
             }
         }
-
         getRutas()
+    }, [rutas])
 
-    }, [])
 
-    if (!rutas) {
-        return <div className="container text-center mt-5">
-            <h2>Cargando rutas...</h2>
-        </div>
+    /*   function handleDelete(id) {
+          const index = rutas.findIndex(idx => idx.id === Number(id))
+          const rutaFilter = rutas.filter(ruta => {
+              if (index >= 0 && ruta.id === Number(id)) {
+                  rutas.splice(index, 1)
+                  console.log(rutas.length)
+              }
+          })
+          //console.log(rutaFilter, index)
+          return setRutas([rutaFilter, ...rutas])
+      } */
+
+    async function handleDelete(id) {
+        const url = process.env.BACKEND_URL + `/api/paths/${id}`
+        try {
+            const response = await fetch(url, { method: 'DELETE', headers: { 'Content-type': 'application/json' } })
+            if (!response.ok) {
+                throw new Error(`status: ${response.status}, text: ${response.statusText}`)
+            }
+            const data = await response.json()
+            console.log(data)
+        } catch (error) {
+            console.log(`Error: ${error}`)
+        }
     }
 
 
@@ -40,22 +60,30 @@ function MisRutas() {
             <Navbar />
             <div className='container'>
                 <div className='d-flex justify-content-between border-bottom my-5'>
-                    <h3 className='text-start '>Has guardado las siguientes rutas</h3>
-                    <span className='h2'>  <GiPathDistance /> </span>
+                    <h3>
+                        <span className='me-2'><GiPathDistance /> </span>
+                        CANTIDAD DE RUTAS FAVORITAS
+                    </h3>
+                    <span className='h2'> {rutas.length === 0 ? '' : rutas.length}  </span>
                 </div>
-                <div>
-                    <ul>
-                        {rutas && rutas.map((ruta) => <li key={ruta.id}><a href='#'>{ruta.title_name}</a></li>)}
-                    </ul>
-                </div>
-                <div className='d-flex flex-wrap justify-content-between mt-4'>
-                    {rutas && rutas.map((ruta) => {
-                        return <Card nombre={ruta.title_name} exigencia={ruta.difficulty} ubicacion={ruta.direction} img={ruta.img}  />
-                    })}
-                </div>
-
+                {rutas ?
+                    <div className='d-flex flex-wrap justify-content-between mt-4'>
+                        {rutas && rutas.map((ruta) => {
+                            return <CardFavorites
+                                key={ruta.id}
+                                nombre={ruta.title_name}
+                                exigencia={ruta.difficulty}
+                                ubicacion={ruta.direction}
+                                img={ruta.img}
+                                deleteRoute={() => handleDelete(ruta.id)}
+                                onClick={() => navigate(`/infoRuta/${ruta.title_name}`)}
+                            />
+                        })}
+                    </div>
+                    :
+                    <p className='mt-5 text-center h1 fw bolder '>NO TIENES RUTAS FAVORITAS</p>
+                }
             </div>
-            {/*   <Footer /> */}
         </>
     )
 }

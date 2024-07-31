@@ -9,14 +9,13 @@ function Senderos() {
   const navigate = useNavigate();
   const [icon, setIcon] = useState(false)
 
-  const postRoute = async (difficulty, direction, img, lat, lng, name) => {
+  const postRoute = async (difficulty, direction, distance, img, lat, lng, name) => {
     const url = process.env.BACKEND_URL + "/api/paths";
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        mode: 'no-cors',
-        body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
+        body: JSON.stringify({ difficulty: difficulty, direction: direction, distance: distance, img: img, lat: lat, lng: lng, title_name: name })
       })
       if (!response.ok) {
         throw new Error(`status: ${response.status}, text: ${response.statusText}`)
@@ -56,7 +55,7 @@ function Senderos() {
                     longitud={el.longitud}
                     exigencia={el.dificultad}
                     onClick={() => navigate(`/infoRuta/${el.nombre}`)}
-                    addRoute={() => postRoute(el.dificultad, el.direccion, el.img, el.lat, el.lng, el.nombre)}
+                    addRoute={() => postRoute(el.dificultad, el.direccion, el.longitud, el.img, el.lat, el.lng, el.nombre)}
                   />
                 ))
                 : "Cargando Rutas"}
