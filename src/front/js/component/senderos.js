@@ -16,6 +16,9 @@ function Senderos() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
+=========
+        body: JSON.stringify({ difficulty: difficulty, direction: direction, distance: distance, img: img, lat: lat, lng: lng, title_name: name })
+>>>>>>>>> Temporary merge branch 2
       })
       if (!response.ok) {
         throw new Error(`status: ${response.status}, text: ${response.statusText}`)
@@ -47,7 +50,7 @@ function Senderos() {
                 ? senderoToken.rutas.map((el, idx) => (
                   <Card
                     key={idx}
-                    img={el.img}
+                    img={el.img.toString()}
                     nombre={el.nombre}
                     ubicacion={el.direccion}
                     longitud={el.longitud}

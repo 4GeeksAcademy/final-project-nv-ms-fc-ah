@@ -27,19 +27,6 @@ function MisRutas() {
         getRutas()
     }, [rutas])
 
-
-    /*   function handleDelete(id) {
-          const index = rutas.findIndex(idx => idx.id === Number(id))
-          const rutaFilter = rutas.filter(ruta => {
-              if (index >= 0 && ruta.id === Number(id)) {
-                  rutas.splice(index, 1)
-                  console.log(rutas.length)
-              }
-          })
-          //console.log(rutaFilter, index)
-          return setRutas([rutaFilter, ...rutas])
-      } */
-
     async function handleDelete(id) {
         const url = process.env.BACKEND_URL + `/api/paths/${id}`
         try {
@@ -47,8 +34,6 @@ function MisRutas() {
             if (!response.ok) {
                 throw new Error(`status: ${response.status}, text: ${response.statusText}`)
             }
-            const data = await response.json()
-            console.log(data)
         } catch (error) {
             console.log(`Error: ${error}`)
         }
