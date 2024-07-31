@@ -409,6 +409,75 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			addGroupMember: async (groupId, userId, role) => {
+				try {
+					const store = getStore();
+					console.log("Current store state:", store); // Debugging line
+					const { user } = store;
+			
+					if (!user || !user.id) {
+						throw new Error('El ID del usuario no está disponible.');
+					}
+			
+					const token = sessionStorage.getItem("accessToken");
+					if (!token) {
+						throw new Error("Falta el token de acceso.");
+					}
+			
+					const response = await fetch(`${process.env.BACKEND_URL}/api/add_group_members`, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${token}`
+						},
+						body: JSON.stringify({ group_id: groupId, user_id: userId, role }),
+					});
+			
+					const data = await response.json();
+			
+					if (!response.ok) {
+						throw new Error(data.error || "Failed to add group member");
+					}
+			
+					// Dispatch action to update the store if needed
+					return data;
+				} catch (error) {
+					console.error("Error adding group member:", error);
+					throw error;
+				}
+			},
+			
+			deleteGroupMember: async (groupId, userId) => {
+				try {
+					// Make the DELETE request to the endpoint
+					const response = await fetch(`${process.env.BACKEND_URL}/api/groups/${groupId}/members/${userId}`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						}
+					});
+			
+					// Log the response status and text for debugging
+					console.log(`Response status: ${response.status}`);
+					const data = await response.json();
+			
+					if (!response.ok) {
+						console.error('Error details:', data);
+						throw new Error(data.message || 'Failed to delete group member');
+					}
+			
+					console.log('Group member deleted successfully');
+					// Optionally, dispatch an action to update the store if needed
+					return data;
+				} catch (error) {
+					console.error('Error deleting group member:', error.message);
+					throw error;
+				}
+			},
+			
+			
+			
+
 			getAllUsers: async () => {
 				const response = await fetch(`${process.env.BACKEND_URL}/api/users`, {
 					method: 'GET',

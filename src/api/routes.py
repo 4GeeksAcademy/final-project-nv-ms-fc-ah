@@ -205,6 +205,21 @@ def add_group_member():
 
     return jsonify(new_group_member.serialize()), 201
 
+@api.route('/groups/<int:group_id>/members/<int:user_id>', methods=['DELETE'])
+def delete_group_member(group_id, user_id):
+    # Fetch the group membership record for the specified user and group
+    member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
+    if not member:
+        return jsonify({"Message": "The user is not a member of this group."}), 404
+
+    # Delete the member from the group
+    db.session.delete(member)
+    db.session.commit()
+    
+    return jsonify({"Message": "User deleted from group."}), 200
+
+
+
 @api.route('/group/members', methods=['GET'])
 def get_members():
 
