@@ -14,7 +14,6 @@ function Senderos() {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        modo: 'no-cors',
         body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
       })
 
@@ -40,9 +39,6 @@ function Senderos() {
             Rutas Disponibles en
             <span className="fw-bolder ms-2">
               Chile
-            Rutas locales favoritas
-            <span className="border-bottom fw-bolder border-3 ms-1 ">
-              Santiago de Chile
             </span>
             <div
               data-bs-spy="scroll"
