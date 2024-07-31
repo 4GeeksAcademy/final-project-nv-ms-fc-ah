@@ -16,7 +16,9 @@ function Senderos() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ difficulty: difficulty, direction: direction, img: img, lat: lat, lng: lng, title_name: name })
-
+=========
+        body: JSON.stringify({ difficulty: difficulty, direction: direction, distance: distance, img: img, lat: lat, lng: lng, title_name: name })
+>>>>>>>>> Temporary merge branch 2
       })
       if (!response.ok) {
         throw new Error(`status: ${response.status}, text: ${response.statusText}`)
@@ -29,8 +31,6 @@ function Senderos() {
     }
 
   }
-
-
 
   return (
     <>
