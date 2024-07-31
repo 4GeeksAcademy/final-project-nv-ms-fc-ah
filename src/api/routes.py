@@ -149,8 +149,8 @@ def create_path():
     lat = request_body.get("lat", None)
     lng = request_body.get("lng", None)
 
-    if request.content_type != 'application/json':
-        return "Unsupported Media Type", 415
+    """ if request.content_type != 'application/json':
+        return "Unsupported Media Type", 415 """
 
     if not title_name or not difficulty or not direction:
         return jsonify({"error": "Title name, difficulty and direction are required"}), 401
@@ -168,6 +168,7 @@ def create_path():
     db.session.commit()
 
     return jsonify(new_path.serialize()), 201
+
 
 @api.route('/paths', methods=['GET'])
 def get_paths():
@@ -195,6 +196,18 @@ def add_favorite_path():
 
     return jsonify(new_favorite_path.serialize()), 201
 
+
+@api.route('/paths/<int:path_id>', methods=['DELETE'])
+def delete_path(path_id):
+    
+    path = Path.query.get(path_id) 
+    if not path:
+       return jsonify({"Mensaje": "ruta no encontrado."}), 404
+
+    db.session.delete(path)
+    db.session.commit()
+
+    return jsonify({'msg': 'path deleted successfully'}), 200
 
 
 @api.route('/add_group_members', methods=['POST'])
