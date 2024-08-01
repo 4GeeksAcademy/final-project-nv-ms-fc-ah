@@ -9,6 +9,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from werkzeug.security import generate_password_hash, check_password_hash # Asegúrate de importar esta función
 from cloudinary.uploader import upload  #cloudinary
 from datetime import timedelta
+import cloudinary.uploader
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -38,6 +39,7 @@ def handle_register():
     db.session.commit()
     return jsonify(new_user.serialize()), 201
 
+
 @api.route('/login', methods=['POST'])
 def handle_login():
     request_body = request.get_json()
@@ -58,7 +60,6 @@ def handle_login():
     return jsonify({"token": access_token, "user_id": user.id}), 200
 
 
-#   
 @api.route('/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     
@@ -136,27 +137,43 @@ def get_singleGroupData(group_id):
     return jsonify([singleGroupData.serialize()]), 200
 
 
+
+
 @api.route('/paths', methods=['POST'])
-@jwt_required()
 def create_path():
     request_body = request.get_json()
-    title_name = request_body.get("Title_name", None)
-    description = request_body.get("Description", None)
-    direction = request_body.get("Direction", None)
+    title_name = request_body.get("title_name", None)
+    difficulty = request_body.get("difficulty", None)
+    direction = request_body.get("direction", None)
+    img = request_body.get("img", None)
+    lat = request_body.get("lat", None)
+    lng = request_body.get("lng", None)
 
-    if not title_name or not description or not direction:
-        return jsonify({"error": "Title name, description and direction are required"}), 401
+    """ if request.content_type != 'application/json':
+        return "Unsupported Media Type", 415 """
+
+    if not title_name or not difficulty or not direction:
+        return jsonify({"error": "Title name, difficulty and direction are required"}), 401
 
     new_path = Path(
-        Title_name=title_name,
-        Description=description,
-        Direction=direction
+        title_name=title_name,
+        difficulty=difficulty,
+        direction=direction,
+        img=img,
+        lat=lat,
+        lng=lng
     )
 
     db.session.add(new_path)
     db.session.commit()
 
     return jsonify(new_path.serialize()), 201
+
+
+@api.route('/paths', methods=['GET'])
+def get_paths():
+    paths = Path.query.all()
+    return jsonify([paths.serialize() for paths in paths]), 200
 
 
 @api.route('/favorite_paths', methods=['POST'])
@@ -180,6 +197,18 @@ def add_favorite_path():
     return jsonify(new_favorite_path.serialize()), 201
 
 
+@api.route('/paths/<int:path_id>', methods=['DELETE'])
+def delete_path(path_id):
+    
+    path = Path.query.get(path_id) 
+    if not path:
+       return jsonify({"Mensaje": "ruta no encontrado."}), 404
+
+    db.session.delete(path)
+    db.session.commit()
+
+    return jsonify({'msg': 'path deleted successfully'}), 200
+
 
 @api.route('/add_group_members', methods=['POST'])
 def add_group_member():
@@ -202,6 +231,21 @@ def add_group_member():
 
     return jsonify(new_group_member.serialize()), 201
 
+@api.route('/groups/<int:group_id>/members/<int:user_id>', methods=['DELETE'])
+def delete_group_member(group_id, user_id):
+    # Fetch the group membership record for the specified user and group
+    member = GroupMember.query.filter_by(user_id=user_id, group_id=group_id).first()
+    if not member:
+        return jsonify({"Message": "The user is not a member of this group."}), 404
+
+    # Delete the member from the group
+    db.session.delete(member)
+    db.session.commit()
+    
+    return jsonify({"Message": "User deleted from group."}), 200
+
+
+
 @api.route('/group/members', methods=['GET'])
 def get_members():
 
@@ -219,6 +263,68 @@ def get_members():
 
     return jsonify([member.serialize() for member in group_members]), 200
 
+@api.route('/groups/<int:group_id>/leave', methods=['POST'])
+@jwt_required()
+def leave_group(group_id):
+    user_id = get_jwt_identity()
+    membership = GroupMember.query.filter_by(group_id=group_id, user_id=user_id).first()
+    
+    if membership:
+        db.session.delete(membership)
+        db.session.commit()
+        return jsonify({"msg": "El usuario ha abandonado el grupo."}), 200
+    else:
+        return jsonify({"msg": "Error al abandonar el grupo porque el usuario no era miembro."}), 404
+    
+
+@api.route('/delete-group-members/<int:group_id>', methods=['DELETE'])
+def delete_group_members(group_id):
+    try:
+        # Fetch all members of the specified group
+        members = GroupMember.query.filter_by(group_id=group_id).all()
+        
+        # Check if the group exists
+        if not members:
+            return jsonify({"message": "No members found for the specified group"}), 404
+        
+        # Delete all members
+        for member in members:
+            db.session.delete(member)
+        
+        # Commit changes
+        db.session.commit()
+        
+        return jsonify({"message": "All members have been deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error: {e}")
+        return jsonify({"message": "An error occurred while deleting members"}), 500
+
+# In your Flask app
+@api.route('/groups/<int:group_id>', methods=['DELETE'])
+@jwt_required()
+def delete_group(group_id):
+    # Ensure the user is the admin of the group
+    user_id = get_jwt_identity()
+    group = Group.query.get(group_id)
+    if not group:
+        return jsonify({'msg': 'Group not found'}), 404
+    
+    # Delete the group
+    db.session.delete(group)
+    db.session.commit()
+    
+    return jsonify({'msg': 'Group deleted successfully'}), 200
+
+@api.route('/users', methods=['GET'])
+def get_all_users():
+    try:
+        users = User.query.all()  # Fetch all users
+        serialized_users = [user.serialize() for user in users]  # Serialize user data
+        return jsonify(serialized_users), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred while fetching users'}), 500
 
 @api.route('/change_password', methods=['PUT'])
 def change_password():
@@ -239,22 +345,55 @@ def change_password():
     except Exception as e:
         # Manejar cualquier excepción inesperada
         return jsonify({"error": "Error al procesar la solicitud", "details": str(e)}), 500
+
 #ruta para subir imagenes
 
 @api.route('/upload', methods=['PUT'])
+@api.route('/update_profile', methods=['PUT'])
+def update_profile():
+    try:
+        request_data = request.get_json()
+        user_id = request_data.get('user_id')
+        username = request_data.get('username')
+        email = request_data.get('email')
+        image_url = request_data.get('imageUrl')
+        background_url = request_data.get('backgroundUrl')
+        if not user_id or not username or not email:
+            return jsonify({"error": "User ID, username, and email are required."}), 400
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"error": "User not found."}), 404
+        user.username = username
+        user.email = email
+        user.image_url = image_url
+        user.background_url = background_url
+        db.session.commit()
+        return jsonify({"msg": "Profile updated successfully."}), 200
+    except Exception as e:
+        return jsonify({"error": "Error processing request", "details": str(e)}), 500
+    
+#Ruta para subir imagenes
+@api.route('/upload_image', methods=['POST'])
 @jwt_required()
 def upload_image():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400  
+        return jsonify({"error": "No file part in the request"}), 400
     file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
     try:
-        # Subir la imagen a Cloudinary
         upload_result = cloudinary.uploader.upload(file)
-        return jsonify({"url": upload_result['secure_url']}), 200
+        image_url = upload_result.get('url')
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        user.img = image_url
+        db.session.commit()
+        return jsonify({"message": "Image uploaded successfully", "image_url": image_url}), 200
     except Exception as e:
         return jsonify({"error": "Error uploading image", "details": str(e)}), 500
+
 @api.route('/image/<string:image_id>', methods=['GET'])
 def get_image(image_id):
     # Construir la URL de la imagen usando el ID
@@ -313,3 +452,4 @@ def google_login():
         return jsonify({"token": access_token, "user_id": user.id}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+

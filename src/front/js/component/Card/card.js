@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { GiPathDistance } from "react-icons/gi";
 import { GiMountainClimbing } from "react-icons/gi";
+import { FaBookmark } from "react-icons/fa";
+import { FaRegBookmark } from "react-icons/fa";
 import style from "../Card/style.module.css";
 
-const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick }) => {
+
+const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick, addRoute, iconfunction, icon }) => {
+  const [activeBtn, setActiveBtn] = useState(false)
+
   return (
-    <div onClick={onClick} className={style.container_card}>
+    <div className={style.container_card}>
       <div className={style.card_img}>
         <img src={img} alt="" />
       </div>
@@ -28,8 +33,14 @@ const Card = ({ img, nombre, ubicacion, longitud, exigencia, onClick }) => {
             {exigencia}
           </p>
         </div>
+        <div className={style.card_seccion_btn}>
+          <span onClick={addRoute}>
+            <span onClick={() => setActiveBtn(true)}>{activeBtn ? <FaBookmark size={20} color="darkblue" /> : <FaRegBookmark size={20} />}</span>
+          </span>
+          <p onClick={onClick} className="btn btn-dark rounded-pill fw-bolder h5">Ver Mas</p>
+        </div>
       </div>
-    </div>
+    </div >
   );
 };
 

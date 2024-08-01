@@ -57,19 +57,24 @@ class Group(db.Model):
 class Path(db.Model):   
     __tablename__= "Path"
     id = db.Column(db.Integer, primary_key=True)
-    title_name = db.Column(db.String(80), unique=True, nullable=False)
-    description = db.Column(db.String(120), unique=True, nullable=False)
+    title_name = db.Column(db.String(150), unique=False, nullable=False)
+    difficulty = db.Column(db.String(120), unique=False, nullable=False)
     direction = db.Column(db.String(120), nullable=False)
     img = db.Column(db.String(120), nullable=True, default='default.jpg')
+    lat = db.Column(db.String(120), unique = False, nullable= False)
+    lng = db.Column(db.String(120), unique = False, nullable= False)
 
     def serialize(self):
         return {
             "id": self.id,
-            "title_name": self.Title_name,
-            "description": self.description,
+            "title_name": self.title_name,
+            "difficulty": self.difficulty,
             "direction": self.direction,
-            "img": self.img
+            "img": self.img,
+            "lat": self.lat,
+            "lng": self.lng
         }
+    
 
 class Favorite_paths(db.Model):
      __tablename__= "FavoritePath"

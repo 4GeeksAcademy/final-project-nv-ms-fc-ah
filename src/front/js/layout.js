@@ -11,6 +11,7 @@ import { CrearGrupo } from "./pages/crearGrupo";
 import { DetalleGrupo } from "./pages/detallesGrupo";
 import { Protegido } from "./component/protegido";
 import injectContext from "./store/appContext";
+
 import { Footer } from "./component/footer";
 
 import Senderos from "./component/senderos";
@@ -18,6 +19,10 @@ import InfoRutas from "./component/infoRutas";
 import UserProfile from "./component/UserProfile";
 import EditProfile from "./component/EditProfile";
 import { VerMisGrupos } from "./pages/verMisGrupos";
+import { UnirmeAGrupo } from "./pages/unirmeGrupo";
+import MisRutas from "./component/misRutas";
+import { Users } from "./pages/users";
+
 
 //create your first component
 const Layout = () => {
@@ -43,10 +48,13 @@ const Layout = () => {
               <Route element={<Grupos />} path="/grupos" />
               <Route element={<CrearGrupo />} path="/grupos/crear-grupo" />
               <Route element={<VerMisGrupos />} path="/grupos/mis-grupos" />
+              <Route element={<UnirmeAGrupo />} path="/grupos/unirme" />
               <Route element={<DetalleGrupo />} path="/grupos/:id" />
               <Route element={<UserProfile />} path="/userprofile" />
               <Route element={<EditProfile />} path="/editprofile" />
+              <Route element={<MisRutas />}  path="/mis-rutas"/>
               <Route element={<InfoRutas />} path="/infoRuta/:nombre" />
+              <Route element={<Users />} path="/users" />
             </Route>
           </Routes>
         </div>
