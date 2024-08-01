@@ -47,9 +47,9 @@ function MisRutas() {
                 <div className='d-flex justify-content-between border-bottom my-5'>
                     <h3>
                         <span className='me-2'><GiPathDistance /> </span>
-                        CANTIDAD DE RUTAS FAVORITAS
+                        RUTAS FAVORITAS
                     </h3>
-                    <span className='h2'> {rutas.length === 0 ? '' : rutas.length}  </span>
+
                 </div>
                 {rutas ?
                     <div className='d-flex flex-wrap justify-content-between mt-4'>

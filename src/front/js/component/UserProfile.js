@@ -5,6 +5,7 @@ import { Container, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './UserProfile.css';
 import { GiMountains } from "react-icons/gi";
+import { Navbar } from './navbar';
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
@@ -70,28 +71,7 @@ const UserProfile = () => {
   };
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <Container className="d-flex justify-content-between align-items-center">
-          <h3 className="text-start fw-bolder d-flex align-items-center">
-            <span className="me-2 h1">
-              <GiMountains />
-            </span>
-            SenderosApp
-          </h3>
-          <div className="collapse navbar-collapse d-flex justify-content-end">
-            <ul className="navbar-nav d-flex align-items-center">
-              <li className="nav-item">
-                <span className="navbar-text me-3">Hola, {userData?.username || 'Usuario'}</span>
-              </li>
-              <li className="nav-item">
-                <Button variant="danger" onClick={handleGoBack} className="ms-auto me-3">
-                  Volver a Home
-                </Button>
-              </li>
-            </ul>
-          </div>
-        </Container>
-      </nav>
+      <Navbar />
       <div className="container user-profile mt-5">
         <div className="profile-header position-relative">
           <img
