@@ -28,7 +28,6 @@ function Senderos() {
     }
 
   }
-
   return (
     <>
       <Navbar />
@@ -36,7 +35,7 @@ function Senderos() {
         <div className="container">
           <h2>
             Rutas Disponibles en
-            <span className="fw-bolder ms-2">
+            <span className="fw-bolder ms-3">
               Chile
             </span>
             <div
@@ -61,7 +60,6 @@ function Senderos() {
           </h2>
         </div>
       </div>
-
     </>
   );
 }
