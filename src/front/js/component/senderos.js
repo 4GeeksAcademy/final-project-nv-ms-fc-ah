@@ -35,7 +35,7 @@ function Senderos() {
         <div className="container">
           <h2>
             Rutas Disponibles en
-            <span className="fw-bolder ms-3">
+            <span className="fw-bolder ms-2">
               Chile
             </span>
             <div
