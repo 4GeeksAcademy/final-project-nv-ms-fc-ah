@@ -50,7 +50,7 @@ class Group(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "path_id": self.path_id,
+            "path_id": self.path_id
         }
 
 class Path(db.Model):   
