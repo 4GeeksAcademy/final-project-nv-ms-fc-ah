@@ -9,7 +9,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+
   const navigate = useNavigate();
   const { actions } = useContext(Context);
 
@@ -74,7 +74,7 @@ export const Login = () => {
         </div>
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <div className="d-grid mb-3">
-          <button type="submit" className="btn btn-primary">Login</button>
+          <button type="submit" className="btn btn-primary">Entrar</button>
         </div>
         <div className="d-grid mb-3">
           <GoogleLogin
