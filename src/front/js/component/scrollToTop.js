@@ -3,7 +3,7 @@ export const senderoToken = {
 		{
 			img: "https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4",
 			nombre: "Cerro San Cristóbal",
-			direccion: "Parque Metropolitano",
+			direccion: "Santiago, Region Metropolitana",
 			longitud: "9.0 km",
 			dificultad: "Moderada",
 			lat: -33.41930816410475,
@@ -102,7 +102,7 @@ export const senderoToken = {
 		{
 			img: "https://andeshandbook.s3.amazonaws.com/media/route_gallery/thumb600x400/1454617012336551671.jpg",
 			nombre: "Torres del paine",
-			direccion: "Región de Magallanes",
+			direccion: "Region de Magallanes",
 			longitud: "76.5 km",
 			dificultad: "Dificil",
 			lat: -50.94220448676759,

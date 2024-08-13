@@ -347,6 +347,7 @@ def change_password():
         return jsonify({"error": "Error al procesar la solicitud", "details": str(e)}), 500
 
 #ruta para subir imagenes
+
 @api.route('/upload', methods=['PUT'])
 @api.route('/update_profile', methods=['PUT'])
 def update_profile():
@@ -393,13 +394,62 @@ def upload_image():
     except Exception as e:
         return jsonify({"error": "Error uploading image", "details": str(e)}), 500
 
+@api.route('/image/<string:image_id>', methods=['GET'])
+def get_image(image_id):
+    # Construir la URL de la imagen usando el ID
+    cloud_name = 'dfle6uz4i'  # lo tome de la pagina
+    image_url = f'https://res.cloudinary.com/{dfle6uz4i}/image/upload/{image_id}'
+    image_url = f'https://res.cloudinary.com/dfle6uz4i/image/upload/{image_id}'
+    # Devolver la URL de la imagen en la respuesta
+    return jsonify({"url": image_url}), 200
 
+@api.route('/update_profile', methods=['POST'])
+def update_profile():
+    try:
+        request_data = request.get_json()
+        name = request_data['name']
+        surname = request_data['surname']
+        email = request_data['email']
+        imageUrl = request_data['imageUrl']
+        backgroundUrl = request_data['backgroundUrl']
+        # Aquí actualizas el perfil del usuario en la base de datos
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.name = name
+            user.surname = surname
+            user.image_url = imageUrl
+            user.background_url = backgroundUrl
+            db.session.commit()
+            return jsonify({"msg": "Perfil actualizado exitosamente"}), 200
+        else:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 
-
-
-
-
-
-
-
+@api.route('/google-login', methods=['POST'])
+def google_login():
+    try:
+        token = request.json.get('token')
+        # Verify the token
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), "<653613152975-b4ccn14o78vpr1orsnspde7llqtc3pbg.apps.googleusercontent.com")
+        
+        # Extract user information
+        user_email = idinfo['email']
+        user_name = idinfo.get('name')
+        
+        # Check if user exists, if not, create a new one
+        user = User.query.filter_by(email=user_email).first()
+        if not user:
+            user = User(email=user_email, username=user_name)
+            db.session.add(user)
+            db.session.commit()
+        
+        # Create JWT token
+        expires = timedelta(days=3)
+        access_token = create_access_token(identity=user.id, expires_delta=expires)
+        
+        return jsonify({"token": access_token, "user_id": user.id}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
