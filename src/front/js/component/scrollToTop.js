@@ -57,7 +57,7 @@ export const senderoToken = {
 		{/** */
 			img: "https://fastly.picsum.photos/id/54/3264/2176.jpg?hmac=blh020fMeJ5Ru0p-fmXUaOAeYnxpOPHnhJojpzPLN3g",
 			nombre: "Laguna Cerro Castillo",
-			direccion: "Hueitra",
+			direccion: "Coyhaique",
 			longitud: "14.6 km",
 			dificultad: "Dificil",
 			lat: -46.11257555395794,
