@@ -133,5 +133,18 @@
 
 .mapa {
   width: 100%;
-  height: 50vh;
+  height: 92%;
+  max-height: 94%;
+}
+
+/*media querys info rutas*/
+@media (min-width: 400px) and (max-width: 800px) {
+  .container_infoRutas {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 25rem;
+  }
 }

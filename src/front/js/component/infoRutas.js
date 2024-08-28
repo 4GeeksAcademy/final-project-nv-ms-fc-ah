@@ -12,6 +12,7 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import Clima from "./Card/CardClima";
+import Gemini from "./Card/Gemini";
 
 
 function InfoRutas() {
@@ -51,15 +52,17 @@ function InfoRutas() {
 
         <div className={style.container_infoMap}>
           <div className="px-4 mx-2">
-            <h3 className="fw-bold text-center text-secondary">INFORMACION DE RUTA</h3>
-            <p className="my-2 h5 "> Esta ruta está ubicada cerca de la ciudad de <span className="fw-bolder">{ruta && ruta.direccion} </span>
+            <p className="lh-base"> Esta ruta está ubicada cerca de la ciudad de <span className="fw-bolder">{ruta && ruta.direccion} </span>
               su nivel de exigencia es <span className="fw-bolder"> {ruta && ruta.dificultad} </span>
               la distancia del sendero es de  <span className="fw-bolder">{ruta && ruta.longitud}, </span>
               las coordenadas para encontrar esta ruta en el mapa son las siguientes
               Latitud: <span className="fw-bolder">{coordenadas && coordenadas.lat} </span>
               Longitud: <span className="fw-bolder">{coordenadas && coordenadas.lng}</span>.
             </p>
-            <h3 className="mt-3">Recomendaciones</h3>
+            <div className="border border-black rounded text-center">
+              <h3 className="text-secondary fw-bold pt-3" >Recomendaciones</h3>
+              {ruta && <Gemini dificultad={ruta && ruta.dificultad} distancia={ruta && ruta.longitud} ubicacion={ruta && ruta.direccion} />}
+            </div>
           </div>
 
           <div className={style.container_mapa}>
