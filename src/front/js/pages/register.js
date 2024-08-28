@@ -37,7 +37,7 @@ export const Register = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -64,7 +64,7 @@ export const Register = () => {
             <span className="input-group-text"><FaEnvelope /></span>
             <input
               type="email"
-              className="form-control"
+              className="form-control"  
               id="staticEmail"
               placeholder="email@ejemplo.com"
               onChange={(e) => setEmail(e.target.value)}
