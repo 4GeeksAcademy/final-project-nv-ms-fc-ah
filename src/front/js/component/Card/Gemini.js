@@ -27,8 +27,7 @@ function Gemini({ dificultad, distancia, ubicacion }) {
 
     gemini && console.log(gemini.response.candidates[0].content.parts[0].text);
     return (
-        <div className="row p-3">
-            <div className="fw-bolder">{gemini && gemini.response.candidates[0].content.parts[0].text}</div>
+        <div className="p-3">
             <span>
                 <svg class="icon icon-tabler icon-tabler-message-2" width="50" height="50" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -37,6 +36,7 @@ function Gemini({ dificultad, distancia, ubicacion }) {
                     <path d="M9 18h-3a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-3l-3 3l-3 -3z" />
                 </svg>
             </span>
+            <div className="fw-bolder mt-2">{gemini && gemini.response.candidates[0].content.parts[0].text}</div>
         </div>
     )
 }
