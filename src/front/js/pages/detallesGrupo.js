@@ -19,6 +19,9 @@ export const DetalleGrupo = () => {
     const [userFetched, setUserFetched] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [usersToAdd, setUsersToAdd] = useState([]);
+    const [posts, setPosts] = useState([]); // State to store posts
+    const [title, setTitle] = useState(''); // Title input state
+    const [message, setMessage] = useState(''); // Message input state
 
     const navigate = useNavigate();
 
@@ -147,6 +150,17 @@ export const DetalleGrupo = () => {
         }
     };
 
+    const handlePostSubmit = (e) => {
+        e.preventDefault();
+        const newPost = {
+            title,
+            message
+        };
+        setPosts([...posts, newPost]); // Add the new post to the posts state
+        setTitle(''); // Clear title input
+        setMessage(''); // Clear message input
+    };
+
     const isAdmin = admin && user && admin.id === user.id;
     const isMember = members.some(member => member.userInfo && user && member.userInfo.id === user.id);
 
@@ -229,6 +243,53 @@ export const DetalleGrupo = () => {
                             users={usersToAdd}
                             handleAddUser={handleAddUser}
                         />
+
+                        {isAdmin && (
+                            <div>
+                                <div className="dropdown">
+                                    <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                        Publicar Mensaje
+                                    </button>
+                                    <form className="dropdown-menu p-4" onSubmit={handlePostSubmit}>
+                                        <div className="mb-3">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={title}
+                                                onChange={(e) => setTitle(e.target.value)}
+                                                placeholder="Título"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mb-3">
+                                            <textarea
+                                                className="form-control"
+                                                value={message}
+                                                onChange={(e) => setMessage(e.target.value)}
+                                                placeholder="Mensaje"
+                                                required
+                                            />
+                                        </div>
+                                        <button type="submit" className="btn btn-info">Publicar</button>
+                                    </form>
+                                </div>
+
+                                <div className="mt-4">
+                                    <h3>Mensajes del grupo:</h3>
+                                    {posts.length > 0 ? (
+                                        posts.map((post, index) => (
+                                            <div key={index} className="alert alert-info">
+                                                <strong>{post.title}</strong>
+                                                <p>{post.message}</p>
+                                                
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No hay mensajes en este grupo.</p>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <p>Grupo no encontrado.</p>
