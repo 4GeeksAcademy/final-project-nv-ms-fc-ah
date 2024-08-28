@@ -1,6 +1,6 @@
 /* Ensure the parent container uses flexbox and has a minimum height of 100vh */
 body, html {
-    height: 100%;
+    height: auto;
     margin: 0;
   }
   
@@ -8,7 +8,7 @@ body, html {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
+  } 
   
   .footer {
     padding: 1rem;

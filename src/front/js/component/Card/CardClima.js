@@ -30,35 +30,32 @@ function Clima({ city, img = 'https://fastly.picsum.photos/id/190/2048/1365.jpg?
 
     return (
         <div className="card mt-3" style={{
-            maxWidth: '450px', height: '100vh'
+            maxWidth: '500px', height: '100%'
         }}>
             <div className="card-body">
-                <h2 className='text-center  fw-bolder'>Clima actual <span><img src={clima.current && clima.current.condition.icon} /> </span> </h2>
+                <h2 className='text-center  fw-bolder'>Clima<span><img src={clima.current && clima.current.condition.icon} /> </span> </h2>
                 <div className='d-flex justify-content-between'>
-                    <p className="h5">{clima.location && clima.location.name}</p>
+                    <p className="h6">{clima.location && clima.location.name}</p>
                     <span><FaLocationDot size={25} color='darkred' /></span>
                 </div>
                 <div className='d-flex justify-content-between'>
-                    <p className=' h5'>Temperatura </p>
+                    <p className=' h6'>Temperatura </p>
                     <p className='bg-dark p-1  rounded-pill text-white'>{clima.current && clima.current.temp_c}° C</p>
                 </div>
                 <div className='d-flex justify-content-between'>
-                    <p className='h5'>Rafagas </p>
+                    <p className='h6'>Rafagas </p>
                     <p className='bg-dark p-1  rounded-pill text-white'>{clima.current && clima.current.gust_kph} Km/h</p>
                 </div>
                 <div className='d-flex justify-content-between'>
-                    <p className='h5'>Viento </p>
+                    <p className='h6'>Viento </p>
                     <p className='bg-dark p-1  rounded-pill text-white'>{clima.current && clima.current.wind_kph} Km/h</p>
                 </div>
                 <div className='d-flex justify-content-between'>
-                    <p className='h5'>Humedad Actual </p>
+                    <p className='h6'>Humedad Actual </p>
                     <p className='bg-dark p-1  rounded-pill text-white'>{clima.current && clima.current.humidity} %</p>
                 </div>
-                <div className='text-center fw-bold'>
-                    <span >{clima.current && clima.current.last_updated}</span>
-                </div>
+                <img src={img} className="card-img-bottom rounded" alt="senderosApp" />
             </div>
-                <img src={img} className="card-img-bottom rounded mt-2" alt="senderosApp" />
         </div >
     )
 
