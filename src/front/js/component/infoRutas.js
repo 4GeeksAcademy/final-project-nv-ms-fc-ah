@@ -11,6 +11,7 @@ import {
   Pin,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
+import Clima from "./Card/CardClima";
 
 
 function InfoRutas() {
@@ -22,6 +23,7 @@ function InfoRutas() {
   const [token, setToken] = useState()
 
 
+  //mapa y rutas
   useEffect(() => {
     senderoToken.rutas.filter(el => {
       if (el.nombre === nombre) {
@@ -42,54 +44,61 @@ function InfoRutas() {
         <span className="fw-bolder ms-3">{ruta && ruta.nombre}</span>
         <span> <GiPathDistance /> </span>
       </h1>
-      <div className={style.content_infoRuta}>
-
-        <div className={style.img_infoRuta}>
-          <img className={style.img_content} src={ruta && ruta.img} />
+      <div className={style.container_infoRutas}>
+        <div className={style.container_infoClima}>
+          {ruta && <Clima city={ruta && ruta.direccion} img={ruta && ruta.img} />}
         </div>
 
-        <div className={style.datos_infoRuta}>
-          <h3 className="fw-bold">INFORMACION DE RUTA</h3>
-          <p>Ubicacion: <span className="text-secondary">{ruta && ruta.direccion}</span></p>
-          <p>Nivel de Exigencia: <span className="text-secondary"> {ruta && ruta.dificultad}</span></p>
-          <p>Distancia de sendero: <span className="text-secondary">{ruta && ruta.longitud}</span></p>
-          <p>Latitud: <span className="text-secondary">{coordenadas && coordenadas.lat}</span></p>
-          <p>Longitud: <span className="text-secondary">{coordenadas && coordenadas.lng}</span></p>
-        </div>
+        <div className={style.container_infoMap}>
+          <div className="px-4 mx-2">
+            <h3 className="fw-bold text-center text-secondary">INFORMACION DE RUTA</h3>
+            <p className="my-2 h5 "> Esta ruta está ubicada cerca de la ciudad de <span className="fw-bolder">{ruta && ruta.direccion} </span>
+              su nivel de exigencia es <span className="fw-bolder"> {ruta && ruta.dificultad} </span>
+              la distancia del sendero es de  <span className="fw-bolder">{ruta && ruta.longitud}, </span>
+              las coordenadas para encontrar esta ruta en el mapa son las siguientes
+              Latitud: <span className="fw-bolder">{coordenadas && coordenadas.lat} </span>
+              Longitud: <span className="fw-bolder">{coordenadas && coordenadas.lng}</span>.
+            </p>
+            <h3 className="mt-3">Recomendaciones</h3>
+          </div>
 
-        <div className={style.map_infoRuta}>
-          {ruta ? (<APIProvider apiKey={token && token.token}>
-            <div className={style.map}>
-              <Map zoom={10} center={coordenadas ? coordenadas : ''} mapId={token && token.token}>
-                <AdvancedMarker
-                  position={coordenadas ? coordenadas : <div>Esperando coordenadas...</div>}
-                  onClick={() => setOpen(true)}
-                >
-                  <Pin
-                    background={"red"}
-                    borderColor={"black"}
-                    glyphColor={"black"}
-                  />
-                </AdvancedMarker>
-                {open && (
-                  <InfoWindow
+          <div className={style.container_mapa}>
+            {ruta ? (<APIProvider apiKey={token && token.token}>
+              <div className={style.mapa}>
+                <Map zoom={10} center={coordenadas ? coordenadas : ''} mapId={token && token.token}>
+                  <AdvancedMarker
                     position={coordenadas ? coordenadas : <div>Esperando coordenadas...</div>}
-                    onCloseClick={() => setOpen(false)}
+                    onClick={() => setOpen(true)}
                   >
-                    <p className="h2 text-center">
-                      <GiMountaintop />
-                      <span className="fw-bolder h4 me-2">SenderosApp</span>
-                    </p>
-                    <p className="text-center">Ruta: {ruta && ruta.nombre}</p>
-                  </InfoWindow>
-                )}
-              </Map>
-            </div>
+                    <Pin
+                      background={"red"}
+                      borderColor={"black"}
+                      glyphColor={"black"}
+                    />
+                  </AdvancedMarker>
+                  {open && (
+                    <InfoWindow
+                      position={coordenadas ? coordenadas : <div>Esperando coordenadas...</div>}
+                      onCloseClick={() => setOpen(false)}
+                    >
+                      <p className="h2 text-center">
+                        <GiMountaintop />
+                        <span className="fw-bolder h4 me-2">SenderosApp</span>
+                      </p>
+                      <p className="text-center">Ruta: {ruta && ruta.nombre}</p>
+                    </InfoWindow>
+                  )}
+                </Map>
+              </div>
 
-          </APIProvider>) : <div>Cargando mapa...</div>}
+            </APIProvider>) : <div>Cargando mapa...</div>}
+          </div>
+
         </div>
-      </div >
+
+      </div>
     </>
+
   );
 }
 
